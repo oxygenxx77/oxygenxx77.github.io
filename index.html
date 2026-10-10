@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>oxygenxx77 · Vibe Coding 作品集</title>
-<meta name="description" content="运营 / 产品背景，用 AI 结对编程做出的一套求职工具链：求职助手、秋招看板、简历自动填充、桌宠，以及恋爱观测试小站。">
+<meta name="description" content="运营 / 产品背景，用 AI 结对编程做出的一套求职工具链：求职助手、秋招看板、简历自动填充、桌宠。">
 <link rel="icon" href="assets/pet-kanban.png">
 <style>
   :root {
@@ -85,11 +85,6 @@
   .chip { font-size: 12px; padding: 3px 10px; border: 1px solid var(--rule); border-radius: 999px; background: var(--card); color: var(--muted); }
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border: 1px solid var(--ink); border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; }
   .btn:hover { background: var(--ink); color: var(--paper); }
-  .btn.ghost { border-color: var(--rule); color: var(--muted); margin-left: 8px; }
-  .btn.ghost:hover { border-color: var(--ink); }
-  .aside-title { display: flex; align-items: center; gap: 16px; margin: 56px 0 8px; color: var(--muted); font-size: 13px; letter-spacing: 3px; }
-  .aside-title::before, .aside-title::after { content: ""; flex: 1; border-top: 1px solid var(--rule); }
-  .aside-title + .project { border-top: 0; }
 
   .method { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
   .step { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 22px; }
@@ -163,7 +158,7 @@
       </div>
     </div>
     <div class="stats">
-      <div class="stat"><b>4 + 2</b><span>个项目 + 只桌宠</span></div>
+      <div class="stat"><b>3 + 2</b><span>个工具 + 只桌宠</span></div>
       <div class="stat"><b>16,000+</b><span>行代码</span></div>
       <div class="stat"><b>5</b><span>种语言：Python / JS / HTML·CSS / Swift / SQL</span></div>
       <div class="stat"><b>2</b><span>个 AI 助手，能直接改数据、可撤销</span></div>
@@ -263,33 +258,6 @@
         <a class="btn" href="https://github.com/oxygenxx77/resume-autofill" target="_blank" rel="noopener">查看代码 ↗</a>
       </div>
     </article>
-
-    <div class="aside-title"><span>求职之外</span></div>
-
-    <article class="project flip">
-      <div class="shots">
-        <img class="main" src="assets/lt-report.jpg" alt="恋爱观测试合盘报告">
-        <div class="row">
-          <img src="assets/lt-mobile-quiz.jpg" alt="手机端答题">
-          <img src="assets/lt-poster.jpg" alt="分享海报">
-        </div>
-      </div>
-      <div>
-        <h3>💞 恋爱观测试</h3>
-        <p class="sub">30 题六维度，发链接给 TA 各自作答，出合盘报告</p>
-        <p class="pain"><b>起点：</b>最早用 Streamlit 写的版本，「重置」「随机填答」「导入答案」点了都没反应，导出图片也总是部署失败，前后改了二十多次提交都没修好。</p>
-        <ul>
-          <li>定位到根因：Streamlit 滑块绑定 key 后，改 session_state 不会反映到界面；这类需要流畅交互的测试，本质上不适合每次点击都回服务器重跑</li>
-          <li>改成纯前端重写：无服务器、无框架、无依赖，挂在 GitHub Pages 上，手机打开秒出</li>
-          <li>两人各自用手机作答：答案编码进邀请链接，对方答完前看不到；答完生成「结果链接」发回</li>
-          <li>报告除了匹配度和雷达图，还找出「想法差得最远的 3 道题」并给出可以聊的话题</li>
-          <li>分享海报改在浏览器里用 Canvas 画，彻底去掉对服务器端 Chrome 的依赖</li>
-        </ul>
-        <div class="chips"><span class="chip">原生 JavaScript</span><span class="chip">SVG 雷达图</span><span class="chip">Canvas 海报</span><span class="chip">localStorage</span><span class="chip">GitHub Pages</span></div>
-        <a class="btn" href="https://oxygenxx77.github.io/love-test/" target="_blank" rel="noopener">在线体验 ↗</a>
-        <a class="btn ghost" href="https://github.com/oxygenxx77/love-test" target="_blank" rel="noopener">查看代码 ↗</a>
-      </div>
-    </article>
   </div>
 </section>
 
@@ -351,14 +319,6 @@
           <dt>需求</dt><dd>求职助手和看板要认出同一家公司：「广州小鹏汽车科技有限公司」就是「小鹏」。</dd>
           <dt>坑</dt><dd>简单的包含匹配会把「腾讯」的岗位算到「腾讯音乐」的卡片上。</dd>
           <dt>解决</dt><dd>去掉城市前缀和「有限公司 / 集团 / 科技」后缀再比，完全相同优先，有歧义时不猜。</dd>
-        </dl>
-      </div>
-      <div class="story">
-        <h4>修不好的按钮，换个架构就没了</h4>
-        <dl>
-          <dt>现象</dt><dd>恋爱观测试的「重置」「随机」点了没反应，二十多次提交来回改都没解决。</dd>
-          <dt>原因</dt><dd>不是哪一行写错，而是 Streamlit 的组件状态机制：滑块一旦绑定 key，代码再改值界面也不认。</dd>
-          <dt>取舍</dt><dd>不再打补丁，改成纯前端重写。原来的 bug 随架构一起消失，还多出了邀请链接、分享海报等新玩法。</dd>
         </dl>
       </div>
       <div class="story">
