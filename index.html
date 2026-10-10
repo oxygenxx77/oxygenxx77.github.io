@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>oxygenxx77 · Vibe Coding 作品集</title>
+<meta name="description" content="运营 / 产品背景，用 AI 结对编程做出的一套求职工具链：求职助手、秋招看板、简历自动填充、桌宠。">
+<link rel="icon" href="assets/pet-kanban.png">
+<style>
+  :root {
+    --paper: #f5f0e6;
+    --card: #fffdf8;
+    --ink: #1f1b16;
+    --muted: #6f665b;
+    --rule: #d9cfbf;
+    --rust: #b5502b;
+    --teal: #3d6b6e;
+    --blue: #4a7fd4;
+    --gold: #c0953a;
+    --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+    --sans: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.75 var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(245, 240, 230, .92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  nav .brand { font-family: var(--serif); font-weight: 700; font-size: 18px; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  nav .brand img { width: 28px; height: 28px; }
+  nav .links { display: flex; gap: 22px; font-size: 14px; }
+  nav .links a { text-decoration: none; color: var(--muted); }
+  nav .links a:hover { color: var(--rust); }
+
+  header.hero { padding: 88px 0 64px; border-bottom: 1px solid var(--rule); }
+  .eyebrow { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--rust); font-weight: 600; }
+  h1 { font-family: var(--serif); font-size: clamp(34px, 5.4vw, 58px); line-height: 1.25; margin: 14px 0 22px; letter-spacing: 1px; }
+  h1 em { font-style: normal; color: var(--rust); }
+  .lead { font-size: 18px; color: var(--muted); max-width: 720px; margin: 0; }
+  .hero-row { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+  .pets { display: flex; gap: 4px; }
+  .pets img { width: 130px; animation: bob 3.2s ease-in-out infinite; }
+  .pets img:last-child { animation-delay: -1.6s; }
+  @keyframes bob { 50% { transform: translateY(-8px); } }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 56px; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); }
+  .stat { padding: 20px 12px; text-align: center; border-right: 1px dashed var(--rule); }
+  .stat:last-child { border-right: 0; }
+  .stat b { display: block; font-family: var(--serif); font-size: 36px; line-height: 1.2; }
+  .stat span { font-size: 13px; color: var(--muted); }
+
+  section { padding: 80px 0; border-bottom: 1px solid var(--rule); }
+  h2 { font-family: var(--serif); font-size: 32px; margin: 8px 0 12px; }
+  .section-lead { color: var(--muted); max-width: 720px; margin: 0 0 40px; }
+
+  .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; align-items: stretch; }
+  .node { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 18px 16px; position: relative; }
+  .node + .node { margin-left: 28px; }
+  .node + .node::before { content: "→"; position: absolute; left: -24px; top: 50%; transform: translateY(-50%); color: var(--rust); font-size: 20px; }
+  .node .tag { font-size: 12px; color: var(--muted); }
+  .node h4 { margin: 4px 0 6px; font-size: 16px; }
+  .node p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .node.jh { border-top: 3px solid var(--blue); }
+  .node.af { border-top: 3px solid var(--gold); }
+  .node.kb { border-top: 3px solid var(--rust); }
+  .flow-note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+
+  .project { display: grid; grid-template-columns: 1.25fr 1fr; gap: 44px; align-items: start; padding: 48px 0; border-top: 1px dashed var(--rule); }
+  .project:first-of-type { border-top: 0; padding-top: 0; }
+  .project.flip { grid-template-columns: 1fr 1.25fr; }
+  .project.flip .shots { order: 2; }
+  .shots { display: grid; gap: 12px; }
+  .shots .main { border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); box-shadow: 0 10px 30px rgba(60, 40, 20, .08); cursor: zoom-in; background: #fff; }
+  .shots .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .shots .row img { border-radius: 8px; border: 1px solid var(--rule); cursor: zoom-in; background: #fff; height: 220px; object-fit: cover; object-position: top; width: 100%; }
+  .project h3 { font-family: var(--serif); font-size: 26px; margin: 0 0 4px; }
+  .project .sub { color: var(--muted); margin: 0 0 18px; }
+  .pain { background: var(--card); border-left: 3px solid var(--rust); padding: 12px 16px; margin: 0 0 18px; font-size: 15px; }
+  .pain b { color: var(--rust); }
+  .project ul { padding-left: 20px; margin: 0 0 18px; }
+  .project li { margin-bottom: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .chip { font-size: 12px; padding: 3px 10px; border: 1px solid var(--rule); border-radius: 999px; background: var(--card); color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border: 1px solid var(--ink); border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+
+  .method { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .step { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 22px; }
+  .step .n { font-family: var(--serif); font-size: 30px; color: var(--rust); line-height: 1; }
+  .step h4 { margin: 10px 0 8px; font-size: 17px; }
+  .step p { margin: 0; font-size: 14px; color: var(--muted); }
+
+  .stories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .story { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 22px 24px; }
+  .story h4 { margin: 0 0 12px; font-family: var(--serif); font-size: 19px; }
+  .story dl { margin: 0; display: grid; grid-template-columns: 44px 1fr; gap: 6px 10px; font-size: 14px; }
+  .story dt { color: var(--rust); font-weight: 600; }
+  .story dd { margin: 0; color: #3d362e; }
+
+  .privacy { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .privacy ol { padding-left: 20px; margin: 0; }
+  .privacy li { margin-bottom: 12px; }
+  .terminal { background: #1f1b16; color: #e9e1d3; border-radius: 10px; padding: 20px 22px; font: 13px/1.8 "SF Mono", Menlo, Consolas, monospace; overflow-x: auto; white-space: pre; }
+  .terminal .ok { color: #9fc79a; }
+  .terminal .bad { color: #e48f72; }
+  .terminal .dim { color: #8d8478; }
+
+  footer { padding: 48px 0 64px; text-align: center; color: var(--muted); font-size: 14px; }
+  footer a { color: var(--ink); font-weight: 600; }
+
+  .lightbox { position: fixed; inset: 0; background: rgba(20, 16, 12, .86); display: none; align-items: center; justify-content: center; padding: 32px; z-index: 50; cursor: zoom-out; }
+  .lightbox.show { display: flex; }
+  .lightbox img { max-height: 92vh; width: auto; border-radius: 8px; }
+
+  @media (max-width: 900px) {
+    nav .links { display: none; }
+    .hero-row, .project, .project.flip, .privacy { grid-template-columns: 1fr; }
+    .project.flip .shots { order: 0; }
+    .pets img { width: 96px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: 0; }
+    .flow { grid-template-columns: 1fr; gap: 26px; }
+    .node + .node { margin-left: 0; }
+    .node + .node::before { content: "↓"; left: 50%; top: -24px; transform: translateX(-50%); }
+    .method, .stories { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/pet-kanban.png" alt="">oxygenxx77</a>
+    <div class="links">
+      <a href="#flow">工作流</a>
+      <a href="#projects">项目</a>
+      <a href="#method">方法</a>
+      <a href="#stories">迭代故事</a>
+      <a href="#privacy">发布与隐私</a>
+      <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-row">
+      <div>
+        <div class="eyebrow">Vibe Coding Portfolio</div>
+        <h1>不是科班程序员，<br>但我用 AI 把<em>自己的求职</em><br>做成了一套工具</h1>
+        <p class="lead">运营 / 产品背景。秋招期间，我把每天重复的找岗位、筛岗位、填网申、追进度，交给和 AI 结对写出来的工具：从需求、交互到排查 bug 都是我主导，代码由 AI 落地，每个功能都在我自己的求职里天天用、天天改。</p>
+      </div>
+      <div class="pets">
+        <img src="assets/pet-jobhunter.png" alt="桌宠小航">
+        <img src="assets/pet-kanban.png" alt="桌宠小招">
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>3 + 2</b><span>个工具 + 只桌宠</span></div>
+      <div class="stat"><b>16,000+</b><span>行代码</span></div>
+      <div class="stat"><b>5</b><span>种语言：Python / JS / HTML·CSS / Swift / SQL</span></div>
+      <div class="stat"><b>2</b><span>个 AI 助手，能直接改数据、可撤销</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="flow">
+  <div class="wrap">
+    <div class="eyebrow">The Workflow</div>
+    <h2>一条完整的求职工作流</h2>
+    <p class="section-lead">三个工具各管一段，数据互通：在一个地方标记「已投递」，另外两个地方同步更新；两个 AI 助手也能看到彼此的数据。</p>
+    <div class="flow">
+      <div class="node jh"><div class="tag">浏览器扩展</div><h4>采集岗位</h4><p>在牛客一键采集岗位，或按公司拉取全部在招岗位</p></div>
+      <div class="node jh"><div class="tag">求职助手</div><h4>AI 打分 · 推荐</h4><p>按简历、方向、城市打分，按公司推荐前 3 个</p></div>
+      <div class="node af"><div class="tag">简历自动填充</div><h4>填网申</h4><p>识别当前岗位，一键填表，AI 写自我评价和开放题</p></div>
+      <div class="node jh"><div class="tag">求职助手</div><h4>标记已投递</h4><p>受每日上限约束，自动同步到秋招看板</p></div>
+      <div class="node kb"><div class="tag">秋招看板</div><h4>测评 · 面试 · Offer</h4><p>说一句话更新进度，日历订阅、微信提醒</p></div>
+    </div>
+    <p class="flow-note">🖥 两只桌宠「小航」和「小招」常驻桌面：单击启动对应服务并打开页面，悬停看今天的待办。</p>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow">Projects</div>
+    <h2>项目</h2>
+    <p class="section-lead">截图里的岗位、简历和对话都是用脚本生成的虚构数据。</p>
+
+    <article class="project">
+      <div class="shots">
+        <img class="main" src="assets/jh-list.jpg" alt="求职助手岗位列表">
+        <div class="row">
+          <img src="assets/jh-companies.jpg" alt="按公司推荐">
+          <img src="assets/jh-chat.jpg" alt="AI 求职顾问">
+        </div>
+      </div>
+      <div>
+        <h3>🧭 求职助手</h3>
+        <p class="sub">采集岗位 → AI 匹配 → 按公司推荐 → 辅助投递</p>
+        <p class="pain"><b>痛点：</b>牛客上几百个岗位，一个个点开看 JD、对照简历判断值不值得投，一晚上也看不完几家。</p>
+        <ul>
+          <li>AI 按「简历 50% + 偏好 30% + 城市 20%」分项打分，最终分由后端加权，避免模型算错</li>
+          <li>按公司推荐：AI 匹配、岗位方向、城市、公司规模、title 加权排序，支持「运营>营销=产品」式优先级</li>
+          <li>AI 顾问通过工具调用直接改数据：「把北京的岗位都标记为拒绝」</li>
+          <li>AI 失败自动退避重试，最终退化为本地规则打分；每日投递上限防止滥投</li>
+          <li>限投数没用 AI 估算：实测同一家公司问两次结果不一样，改为手填</li>
+        </ul>
+        <div class="chips"><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">OpenAI 兼容接口 · Function Calling</span><span class="chip">Chrome 扩展 MV3</span><span class="chip">Swift / SwiftUI</span></div>
+        <a class="btn" href="https://github.com/oxygenxx77/job-hunter" target="_blank" rel="noopener">查看代码 ↗</a>
+      </div>
+    </article>
+
+    <article class="project flip">
+      <div class="shots">
+        <img class="main" src="assets/kanban-board.jpg" alt="秋招看板总览">
+        <div class="row">
+          <img src="assets/kanban-cards.jpg" alt="公司卡片">
+          <img src="assets/kanban-chat.jpg" alt="小招">
+        </div>
+      </div>
+      <div>
+        <h3>🍂 秋招看板</h3>
+        <p class="sub">管投递之后的一切：测评截止、面试、等结果、Offer</p>
+        <p class="pain"><b>痛点：</b>投了几十家以后，哪家测评快截止、哪家约了几面、哪家该催进度，记在备忘录里全乱了。</p>
+        <ul>
+          <li>AI 助手「小招」：说「美团约了二面，周五下午三点」就自动记面试、改状态</li>
+          <li>每次 AI 修改前存快照，一键撤销；撤销前检查中间有没有别的改动</li>
+          <li>AI 声称「已更新」却没调用工具时，后端自动追问一次，防止只嘴上答应</li>
+          <li>iCal 日历订阅 + 微信提醒 + 周报 + 面试模拟</li>
+          <li>数据同步到 SQLite，内置 SQL 练习，还能和求职助手的岗位库跨库 JOIN</li>
+        </ul>
+        <div class="chips"><span class="chip">FastAPI</span><span class="chip">JSON 原子写入 + 自动备份</span><span class="chip">Chart.js</span><span class="chip">iCal</span><span class="chip">SQLite</span></div>
+        <a class="btn" href="https://github.com/oxygenxx77/qiuzhao-kanban" target="_blank" rel="noopener">查看代码 ↗</a>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="shots">
+        <div class="row" style="grid-template-columns: 1fr 1.2fr; align-items: start;">
+          <img src="assets/autofill-popup.jpg" alt="扩展弹窗" style="height: auto;">
+          <img src="assets/autofill-options.jpg" alt="简历编辑页" style="height: auto;">
+        </div>
+      </div>
+      <div>
+        <h3>📝 简历自动填充</h3>
+        <p class="sub">PDF 简历解析 + 网申表单一键填写</p>
+        <p class="pain"><b>痛点：</b>每家公司的网申系统都要把同一份简历重新填一遍，教育、实习、项目要一条条点「添加」，学校、省市还是难点的下拉框。</p>
+        <ul>
+          <li>本地用 pdf.js 解析简历，按版块抽取字段</li>
+          <li>按标签关键词匹配字段，取最长命中，避免「学校所在地」被当成学校名</li>
+          <li>处理 React / Vue 受控输入、可搜索下拉、省市区联动、日期面板等自定义组件</li>
+          <li>以控件上实际显示的文字判断是否选上，而不是「点过就算」</li>
+          <li>和求职助手联动：识别当前岗位、AI 写文书、投完一键标记</li>
+        </ul>
+        <div class="chips"><span class="chip">Chrome 扩展 MV3</span><span class="chip">pdf.js</span><span class="chip">DOM 自动化</span></div>
+        <a class="btn" href="https://github.com/oxygenxx77/resume-autofill" target="_blank" rel="noopener">查看代码 ↗</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="eyebrow">How I Vibe Code</div>
+    <h2>我怎么和 AI 一起写代码</h2>
+    <p class="section-lead">AI 负责写代码，我负责「做什么、为什么、做得对不对」。</p>
+    <div class="method">
+      <div class="step"><div class="n">01</div><h4>从真实痛点出发</h4><p>每个功能都来自我自己求职时卡住的地方，做完马上自己用，好不好用一天就知道。</p></div>
+      <div class="step"><div class="n">02</div><h4>用产品语言提需求</h4><p>讲清楚场景、期望结果和边界情况（比如「腾讯」不能算到「腾讯音乐」头上），而不是指定怎么写代码。</p></div>
+      <div class="step"><div class="n">03</div><h4>带着证据去排查</h4><p>出 bug 时截图、描述复现步骤，让 AI 先定位原因再改；改完自己按原步骤验收。</p></div>
+      <div class="step"><div class="n">04</div><h4>把规则沉淀下来</h4><p>设计取舍写进 README，隐私规则写成检查脚本和提交钩子，下次不靠记性。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <div class="eyebrow">Iteration Stories</div>
+    <h2>迭代故事</h2>
+    <p class="section-lead">比起一次写对，更能体现能力的是：发现问题、找到原因、做出取舍。</p>
+    <div class="stories">
+      <div class="story">
+        <h4>「确认投递」点了没反应？</h4>
+        <dl>
+          <dt>现象</dt><dd>点「确认投递」后岗位还停在「待投递」，以为是 bug。</dd>
+          <dt>原因</dt><dd>按钮其实只是「加入待投递」，名字和行为对不上。</dd>
+          <dt>解决</dt><dd>改名，并新增「📮 标记已投递」，在官网投过的岗位也能直接标记。问题出在交互语义，而不是代码。</dd>
+        </dl>
+      </div>
+      <div class="story">
+        <h4>AI 说「已更新」，看板却没变</h4>
+        <dl>
+          <dt>现象</dt><dd>小招偶尔回复「已经帮你改好了」，实际什么都没改。</dd>
+          <dt>原因</dt><dd>模型有时直接用文字回复，跳过了工具调用。</dd>
+          <dt>解决</dt><dd>后端检测「声称修改但没有成功的工具调用」，自动追问一次；每条修改都列在回复下方，用户能核对、能撤销。</dd>
+        </dl>
+      </div>
+      <div class="story">
+        <h4>桌宠点了一直转圈</h4>
+        <dl>
+          <dt>现象</dt><dd>双击桌宠后服务一直起不来，日志里也没有报错。</dd>
+          <dt>原因</dt><dd>项目在「桌面」文件夹里，macOS 在后台等用户授权，Python 卡在读文件那一步。</dd>
+          <dt>解决</dt><dd>启动超过 6 秒就提示去点系统弹窗的「好」；顺手修了状态卡在「启动中」的问题。</dd>
+        </dl>
+      </div>
+      <div class="story">
+        <h4>限投数为什么不让 AI 估</h4>
+        <dl>
+          <dt>想法</dt><dd>很多公司限投 2~3 个岗位，想让 AI 查出来自动提醒。</dd>
+          <dt>实测</dt><dd>同一家公司连问两次，AI 给的数字都不一样。</dd>
+          <dt>取舍</dt><dd>改为手填，并在卡片上放校招公告链接方便查。不可靠的数据不如没有。</dd>
+        </dl>
+      </div>
+      <div class="story">
+        <h4>「腾讯」不是「腾讯音乐」</h4>
+        <dl>
+          <dt>需求</dt><dd>求职助手和看板要认出同一家公司：「广州小鹏汽车科技有限公司」就是「小鹏」。</dd>
+          <dt>坑</dt><dd>简单的包含匹配会把「腾讯」的岗位算到「腾讯音乐」的卡片上。</dd>
+          <dt>解决</dt><dd>去掉城市前缀和「有限公司 / 集团 / 科技」后缀再比，完全相同优先，有歧义时不猜。</dd>
+        </dl>
+      </div>
+      <div class="story">
+        <h4>把自己的工具开源，又不泄露自己</h4>
+        <dl>
+          <dt>问题</dt><dd>工具里全是真实简历、投递记录、API Key，代码里还写死了本机路径。</dd>
+          <dt>方案</dt><dd>白名单式 .gitignore、本地隐私扫描器、提交前自动检查，再用虚构数据重新截图。</dd>
+          <dt>细节</dt><dd>旧提交里带着本机路径和真实邮箱，于是重建了干净的提交历史。</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap privacy">
+    <div>
+      <div class="eyebrow">Shipping Safely</div>
+      <h2>发布与隐私</h2>
+      <p class="section-lead" style="margin-bottom: 24px;">工具每天处理的都是简历、联系方式和求职进度，所以「开源」这一步本身也当成一个需求来做：</p>
+      <ol>
+        <li><b>白名单式 .gitignore</b>：默认忽略一切，只放行代码、示例和文档，新增的数据文件不会被误提交</li>
+        <li><b>本地隐私扫描器</b>：运行时从本机简历和 .env 读出敏感值（姓名、电话、实习公司、Key），逐行比对待提交的文件；只报「文件:行号 + 类型」，不把隐私打印出来</li>
+        <li><b>提交前钩子</b>：每次 git commit 自动扫描，发现问题直接拒绝提交</li>
+        <li><b>虚构演示数据</b>：求职助手和看板各带一个造数据脚本，扩展截图用模拟的浏览器接口加虚构简历；造数据脚本拒绝写入已有真实数据的目录</li>
+        <li><b>匿名提交身份</b>：提交作者用 GitHub 的 noreply 邮箱</li>
+      </ol>
+    </div>
+    <div class="terminal"><span class="dim">$ git commit -m "update"</span>
+<span class="bad">✗ 发现 2 处疑似隐私信息（只显示位置，不显示内容）：</span>
+  a.py:1        本机路径（含用户名）
+  resume.json   简历数据不应提交
+<span class="dim">确认是误报的行，加上 privacy-ok 注释即可跳过。</span>
+
+<span class="dim">$ git commit -m "init"</span>
+<span class="ok">✓ 隐私检查通过（比对了 14 个本机敏感值 + 通用规则）</span></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>代码都在 <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">github.com/oxygenxx77</a></p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox"><img alt=""></div>
+<script>
+  const box = document.getElementById('lightbox');
+  document.querySelectorAll('.shots img').forEach((img) => {
+    img.addEventListener('click', () => {
+      box.querySelector('img').src = img.src;
+      box.querySelector('img').alt = img.alt;
+      box.classList.add('show');
+    });
+  });
+  box.addEventListener('click', () => box.classList.remove('show'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') box.classList.remove('show'); });
+</script>
+</body>
+</html>
