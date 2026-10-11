@@ -19,6 +19,15 @@ pip install fonttools brotli
 python3 tools/subset_fonts.py
 ```
 
+## PDF 版
+
+[`portfolio.pdf`](portfolio.pdf) 是同一个页面的 A4 打印版，给只能上传附件的网申用，页面封面上有下载链接。打印样式写在 `index.html` 的 `@media print` 里：动画直接显示最终状态，卡片和截图不跨页，链接印出网址；阴影换成细边框，点阵纸底不印，否则 Chrome 会把它们栅格化成整页图片，文件会大到 8MB。改了页面后重新导出（需要 macOS 上的 Chrome）：
+
+```bash
+tools/export_pdf.sh                                # 输出 portfolio.pdf
+swift tools/pdf_pages.swift portfolio.pdf /tmp/pp  # 可选：每页转成 PNG 检查排版
+```
+
 ## 许可证
 
 [MIT](LICENSE)。`assets/fonts/` 里的两款字体遵循 SIL Open Font License（见同目录下的 OFL 文件）。

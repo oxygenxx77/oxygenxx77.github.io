@@ -325,13 +325,15 @@
   .js .hl:not(.in) { background-size: 100% 0, 0 40%; }
   .js .draw path { transition: stroke-dashoffset var(--t-macro) var(--ease); }
 
+  .print-only { display: none; }
+
   @media (min-width: 1200px) { .tabs { display: flex; } }
-  @media (max-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     .sheet { padding: 56px 40px 56px 72px; }
     .route { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 40px; }
     .route-line { display: none; }
   }
-  @media (max-width: 720px) {
+  @media screen and (max-width: 720px) {
     body { font-size: 15.5px; }
     .book { padding: 20px 12px 8px; gap: 28px; }
     .sheet { padding: 40px 20px 52px; }
@@ -358,6 +360,37 @@
     html { scroll-behavior: auto; }
     *, *::before, *::after { transition: none !important; animation: none !important; }
   }
+
+  /* ---------- 打印 / 导出 PDF：A4，按桌面版排版缩小，每一页手帐另起一页 ---------- */
+  @page { size: A4; margin: 9mm 0; background: #efe8db; }
+  @media print {
+    html { zoom: .6; background: var(--desk); }
+    body, .sheet { background-image: none; }
+    .pin { box-shadow: none; }
+    /* 装订孔改用字符画：渐变版会被整页栅格化，PDF 每页多出近 0.5MB */
+    .sheet::before { background: none; content: "\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A\25CF\A"; white-space: pre; overflow: hidden; font: 19px/44px Arial, sans-serif; text-align: center; color: var(--desk); -webkit-text-stroke: 1px rgba(60, 40, 20, .2); }
+    .sheet, .stop, .photo, .worry, .toc, .sticky, .index-card, .pnote, .label-link { box-shadow: 0 0 0 1px rgba(60, 40, 20, .12); }
+    .sticker, .route-foot img, footer .mini img, .receipt-wrap { filter: none; }
+    .receipt { outline: 1px solid rgba(60, 40, 20, .12); }
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    .tabs, .lightbox, .screen-only { display: none !important; }
+    .print-only { display: block; }
+    .js .reveal:not(.in) { opacity: 1; }
+    .js .hl:not(.in) { background-size: 100% 0, 100% 40%; }
+    .draw path { stroke-dashoffset: 0 !important; }
+    .book { padding: 0 40px; gap: 36px; }
+    .sheet { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    #top, #route, #rules, #pits, #ship { break-inside: avoid; }
+    .project, .stop, .photo, .worry, .checks li, .index-card, .pnote, .receipt-wrap, .ship li, .sticky, .toc, .shots-row { break-inside: avoid; }
+    .project h3, .sheet h2 { break-after: avoid; }
+    .photo { cursor: auto; }
+    .label-link { display: block; width: fit-content; }
+    .label-link::after { content: attr(href); display: block; margin-top: 8px; font: 13px/1 var(--f-mono); color: var(--muted); }
+    .label-link .scribble { display: none; }
+    .print-url { margin-top: 10px; font-size: 15px; color: var(--muted); }
+    .print-url a { color: var(--red); text-decoration: none; font-family: var(--f-mono); }
+    footer { break-before: avoid; padding: 40px 24px 48px; }
+  }
 </style>
 <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -383,7 +416,8 @@
           <p>我学的不是计算机，求职方向是运营和产品。秋招这段时间，每天都在重复几件事：翻岗位，判断值不值得投，把同一份简历填进一个又一个网申系统，再记住哪家的测评快截止了。</p>
           <p>后来我开始和 AI 一起，把这些事一件件做成工具。做什么、做成什么样、哪里不对劲，由我来定；代码交给 AI 写。每个功能都在我自己的求职里天天用，用着不顺手，就接着改。</p>
         </div>
-        <p class="gh">代码都在 <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">github.com/oxygenxx77</a></p>
+        <p class="gh">代码都在 <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">github.com/oxygenxx77</a><span class="screen-only"> · <a href="portfolio.pdf" download="oxygenxx77-作品集.pdf">下载 PDF 版</a></span></p>
+        <p class="print-only print-url">在线版（有动画，截图能点开看大图）：<a href="https://oxygenxx77.github.io">oxygenxx77.github.io</a></p>
 
         <div class="toc reveal" style="--r: -.6deg">
           <span class="tape t-teal" style="left: 40%; --tr: 2deg"></span>
@@ -443,7 +477,7 @@
   <section class="sheet" id="tools">
     <div class="kicker">第 2 页 · 工具</div>
     <h2>三个工具</h2>
-    <p class="lead">截图里的岗位、简历和对话，都是用脚本造的假数据。点截图可以看大图。</p>
+    <p class="lead">截图里的岗位、简历和对话，都是用脚本造的假数据。<span class="screen-only">点截图可以看大图。</span></p>
 
     <article class="project" style="--c: var(--blue)">
       <div class="shots">
@@ -658,6 +692,7 @@
     el.classList.add('in');
     if (el.classList.contains('draw')) el.querySelectorAll('path').forEach((p) => (p.style.strokeDashoffset = 0));
   };
+  addEventListener('beforeprint', () => targets.forEach(show));
   if (still) {
     targets.forEach(show);
   } else {
