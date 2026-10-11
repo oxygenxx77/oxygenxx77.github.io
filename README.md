@@ -7,3 +7,7 @@ Vibe Coding 作品集：<https://oxygenxx77.github.io>
 ```bash
 python3 -m http.server 8000
 ```
+
+## 许可证
+
+[MIT](LICENSE)
