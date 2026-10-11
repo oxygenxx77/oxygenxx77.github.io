@@ -3,371 +3,641 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>oxygenxx77 · Vibe Coding 作品集</title>
-<meta name="description" content="运营 / 产品背景，用 AI 结对编程做出的一套求职工具链：求职助手、秋招看板、简历自动填充、桌宠。">
+<title>秋招手帐 · oxygenxx77 的作品集</title>
+<meta name="description" content="运营 / 产品方向的求职者，秋招期间和 AI 一起做的一套求职工具：求职助手、秋招看板、简历自动填充，还有两只桌宠。">
 <link rel="icon" href="assets/pet-kanban.png">
+<link rel="preload" href="assets/fonts/wenkai-medium.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+  @font-face { font-family: "LXGW WenKai"; src: url("assets/fonts/wenkai-medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "Long Cang"; src: url("assets/fonts/longcang.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+
   :root {
-    --paper: #f5f0e6;
-    --card: #fffdf8;
-    --ink: #1f1b16;
-    --muted: #6f665b;
-    --rule: #d9cfbf;
-    --rust: #b5502b;
-    --teal: #3d6b6e;
-    --blue: #4a7fd4;
-    --gold: #c0953a;
-    --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
-    --sans: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    --desk: #efe8db;
+    --paper: #f8f4ec;
+    --card: #fffdf7;
+    --rule: #e2d8c6;
+    --edge: #cfc4b2;
+    --pencil: #9d958a;
+    --muted: #6b645b;
+    --ink: #26231f;
+    --red: #b44f30;
+    --blue: #4e86d8;
+    --hi: #f2d25c;
+    --teal: #506261;
+    --gold: #be9847;
+    --green: #5f7f4f;
+
+    --f-head: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", serif;
+    --f-hand: "Long Cang", "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", cursive;
+    --f-body: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    --f-mono: "SF Mono", Menlo, Consolas, "Courier New", monospace;
+
+    --shadow-low: 0 1px 1px rgba(60, 40, 20, .10), 0 2px 6px -2px rgba(60, 40, 20, .12);
+    --shadow-med: 0 1px 2px rgba(60, 40, 20, .10), 0 14px 22px -12px rgba(60, 40, 20, .35);
+    --shadow-high: 0 2px 4px rgba(60, 40, 20, .12), 0 30px 60px -20px rgba(40, 25, 10, .45);
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    --t-micro: 160ms;
+    --t-normal: 360ms;
+    --t-macro: 900ms;
   }
+
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.75 var(--sans); -webkit-font-smoothing: antialiased; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font: 400 16px/1.85 var(--f-body);
+    letter-spacing: .01em;
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--desk);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .27 0 0 0 0 .18 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
   a { color: inherit; }
   img { max-width: 100%; display: block; }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3, h4 { font-family: var(--f-head); font-weight: 500; letter-spacing: .02em; margin: 0; text-wrap: balance; }
+  p, li, dd { text-wrap: pretty; }
+  p { margin: 0; }
+  .nowrap { white-space: nowrap; }
 
-  nav { position: sticky; top: 0; z-index: 10; background: rgba(245, 240, 230, .92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
-  nav .brand { font-family: var(--serif); font-weight: 700; font-size: 18px; text-decoration: none; display: flex; align-items: center; gap: 8px; }
-  nav .brand img { width: 28px; height: 28px; }
-  nav .links { display: flex; gap: 22px; font-size: 14px; }
-  nav .links a { text-decoration: none; color: var(--muted); }
-  nav .links a:hover { color: var(--rust); }
+  /* ---------- 页面纸 ---------- */
+  .book { max-width: 1080px; margin: 0 auto; padding: 48px 24px 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; }
+  .sheet {
+    position: relative;
+    background-color: var(--paper);
+    background-image: radial-gradient(circle at 1px 1px, var(--rule) 1.1px, transparent 1.4px);
+    background-size: 24px 24px;
+    background-position: 12px 12px;
+    border-radius: 3px;
+    box-shadow: var(--shadow-med);
+    padding: 72px 72px 64px 96px;
+  }
+  .sheet::before {
+    content: "";
+    position: absolute;
+    left: 26px; top: 36px; bottom: 36px; width: 16px;
+    background: radial-gradient(circle at 8px 22px, var(--desk) 5.5px, rgba(60, 40, 20, .18) 6.5px, transparent 7px) 0 0 / 16px 44px repeat-y;
+  }
+  .folio { position: absolute; right: 40px; bottom: 22px; font: 20px/1 var(--f-hand); color: var(--muted); }
+  .kicker { font: 24px/1.2 var(--f-hand); color: var(--red); display: inline-block; transform: rotate(-2deg); margin-bottom: 10px; }
+  .sheet h2 { font-size: 34px; line-height: 1.35; }
+  .lead { color: var(--muted); max-width: 640px; margin-top: 14px; }
 
-  header.hero { padding: 88px 0 64px; border-bottom: 1px solid var(--rule); }
-  .eyebrow { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--rust); font-weight: 600; }
-  h1 { font-family: var(--serif); font-size: clamp(34px, 5.4vw, 58px); line-height: 1.25; margin: 14px 0 22px; letter-spacing: 1px; }
-  h1 em { font-style: normal; color: var(--rust); }
-  .lead { font-size: 18px; color: var(--muted); max-width: 720px; margin: 0; }
-  .hero-row { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
-  .pets { display: flex; gap: 4px; }
-  .pets img { width: 130px; animation: bob 3.2s ease-in-out infinite; }
-  .pets img:last-child { animation-delay: -1.6s; }
-  @keyframes bob { 50% { transform: translateY(-8px); } }
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 56px; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); }
-  .stat { padding: 20px 12px; text-align: center; border-right: 1px dashed var(--rule); }
-  .stat:last-child { border-right: 0; }
-  .stat b { display: block; font-family: var(--serif); font-size: 36px; line-height: 1.2; }
-  .stat span { font-size: 13px; color: var(--muted); }
+  .hand { font-family: var(--f-hand); color: var(--red); font-size: 22px; line-height: 1.3; }
+  .hl {
+    background-image: linear-gradient(transparent, transparent), linear-gradient(color-mix(in srgb, var(--hi) 75%, transparent), color-mix(in srgb, var(--hi) 75%, transparent));
+    background-repeat: no-repeat;
+    background-size: 100% 0, 100% 40%;
+    background-position: 0 0, 0 88%;
+    padding: 0 .08em;
+    transition: background-size var(--t-macro) var(--ease);
+  }
 
-  section { padding: 80px 0; border-bottom: 1px solid var(--rule); }
-  h2 { font-family: var(--serif); font-size: 32px; margin: 8px 0 12px; }
-  .section-lead { color: var(--muted); max-width: 720px; margin: 0 0 40px; }
+  /* 纸胶带 */
+  .tape {
+    position: absolute; top: -13px; width: 96px; height: 26px; z-index: 2;
+    background-color: var(--c, rgba(78, 134, 216, .42));
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, .32) 0 4px, transparent 4px 10px);
+    clip-path: polygon(0 0, 4% 16%, 0 32%, 4% 48%, 0 64%, 4% 80%, 0 100%, 100% 100%, 96% 84%, 100% 68%, 96% 52%, 100% 36%, 96% 20%, 100% 0);
+    transform: rotate(var(--tr, -4deg));
+    mix-blend-mode: multiply;
+  }
+  .tape.dots { background-image: radial-gradient(circle, rgba(255, 255, 255, .5) 1.6px, transparent 2px); background-size: 9px 9px; }
+  .t-blue { --c: rgba(78, 134, 216, .42); }
+  .t-red { --c: rgba(180, 79, 48, .40); }
+  .t-gold { --c: rgba(190, 152, 71, .50); }
+  .t-teal { --c: rgba(80, 98, 97, .38); }
+  .t-green { --c: rgba(95, 127, 79, .40); }
 
-  .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; align-items: stretch; }
-  .node { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 18px 16px; position: relative; }
-  .node + .node { margin-left: 28px; }
-  .node + .node::before { content: "→"; position: absolute; left: -24px; top: 50%; transform: translateY(-50%); color: var(--rust); font-size: 20px; }
-  .node .tag { font-size: 12px; color: var(--muted); }
-  .node h4 { margin: 4px 0 6px; font-size: 16px; }
-  .node p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
-  .node.jh { border-top: 3px solid var(--blue); }
-  .node.af { border-top: 3px solid var(--gold); }
-  .node.kb { border-top: 3px solid var(--rust); }
-  .flow-note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+  /* 手绘线条 */
+  .scribble { display: inline-block; overflow: visible; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-  .project { display: grid; grid-template-columns: 1.25fr 1fr; gap: 44px; align-items: start; padding: 48px 0; border-top: 1px dashed var(--rule); }
-  .project:first-of-type { border-top: 0; padding-top: 0; }
-  .project.flip { grid-template-columns: 1fr 1.25fr; }
+  /* ---------- 侧边索引标签 ---------- */
+  .tabs { position: fixed; right: 0; top: 50%; transform: translateY(-50%); display: none; flex-direction: column; gap: 6px; z-index: 20; }
+  .tabs a {
+    writing-mode: vertical-rl;
+    font: 500 15px/1 var(--f-head);
+    letter-spacing: .25em;
+    text-decoration: none;
+    padding: 16px 10px 16px 12px;
+    border-radius: 6px 0 0 6px;
+    background: color-mix(in srgb, var(--c) 30%, var(--card));
+    box-shadow: var(--shadow-low);
+    transform: translateX(6px);
+    transition: transform var(--t-micro) var(--ease), background var(--t-micro);
+  }
+  .tabs a:hover, .tabs a.on { transform: translateX(0); background: color-mix(in srgb, var(--c) 55%, var(--card)); }
+
+  /* ---------- 封面页 ---------- */
+  .cover { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: start; }
+  .cover h1 { font-size: clamp(38px, 5.6vw, 60px); line-height: 1.18; margin: 4px 0 28px; }
+  .cover .intro p + p { margin-top: 14px; }
+  .cover .intro { max-width: 560px; }
+  .gh { margin-top: 26px; font-size: 15px; color: var(--muted); }
+  .gh a { color: var(--ink); text-decoration-color: var(--red); text-underline-offset: 4px; }
+
+  .toc {
+    position: relative; margin-top: 44px; max-width: 520px;
+    background-color: var(--card);
+    background-image: repeating-linear-gradient(to bottom, transparent 0 39px, color-mix(in srgb, var(--blue) 22%, transparent) 39px 40px);
+    background-position: 0 52px;
+    padding: 18px 28px 22px;
+    box-shadow: var(--shadow-low);
+    transform: rotate(-.6deg);
+  }
+  .toc h3 { font-size: 20px; line-height: 40px; }
+  .toc ol { list-style: none; margin: 0; padding: 0; }
+  .toc li { display: flex; align-items: baseline; gap: 8px; line-height: 40px; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { color: var(--red); }
+  .toc .dots { flex: 1; border-bottom: 2px dotted var(--edge); transform: translateY(-6px); }
+  .toc .pg { font: 20px/1 var(--f-hand); color: var(--red); }
+
+  .desk-corner { position: relative; padding-top: 8px; }
+  .stickers { display: flex; justify-content: center; gap: 0; position: relative; }
+  .sticker {
+    width: 150px;
+    filter: drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff) drop-shadow(0 6px 6px rgba(60, 40, 20, .22));
+    transform: rotate(var(--r));
+    transition: transform var(--t-normal) var(--ease);
+  }
+  .sticker:hover { transform: rotate(calc(var(--r) * -1)) scale(1.04); }
+  .pet-note { display: flex; gap: 6px; align-items: flex-start; justify-content: center; margin: 2px 0 26px; }
+  .pet-note .scribble { width: 46px; height: 34px; color: var(--red); transform: translateY(-14px); }
+
+  .sticky {
+    position: relative;
+    background: color-mix(in srgb, var(--hi) 42%, var(--card));
+    padding: 26px 26px 24px;
+    box-shadow: var(--shadow-med);
+    transform: rotate(var(--r, 1.5deg));
+  }
+  .sticky h3 { font-size: 22px; margin-bottom: 8px; }
+  .sticky ul { list-style: none; margin: 0; padding: 0; }
+  .sticky li { padding-left: 22px; position: relative; font-size: 15px; line-height: 1.8; }
+  .sticky li + li { margin-top: 6px; }
+  .sticky li::before { content: ""; position: absolute; left: 2px; top: .8em; width: 10px; height: 2px; background: var(--ink); border-radius: 2px; transform: rotate(-8deg); }
+  .sticky b { font-family: var(--f-head); font-weight: 500; font-size: 19px; }
+
+  /* ---------- 路线 ---------- */
+  .route { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; margin-top: 52px; padding: 18px 0 30px; }
+  .route-line { position: absolute; left: 4%; right: 4%; top: 50%; width: 92%; height: 90px; transform: translateY(-50%); color: var(--edge); }
+  .route-line path { stroke-dasharray: 2 9; stroke-width: 2.5; }
+  .stop {
+    position: relative; background: var(--card); padding: 22px 18px 18px;
+    box-shadow: var(--shadow-med);
+    transform: translateY(var(--y, 0)) rotate(var(--r, 0deg));
+  }
+  .stop .who { font: 19px/1.2 var(--f-hand); color: var(--c); }
+  .stop h3 { font-size: 19px; margin: 6px 0 6px; }
+  .stop p { font-size: 13.5px; line-height: 1.7; color: var(--muted); }
+  .route-foot { display: flex; align-items: center; gap: 14px; margin-top: 30px; color: var(--muted); font-size: 15px; }
+  .route-foot img { width: 44px; filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff); }
+
+  /* ---------- 工具 ---------- */
+  .project { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 56px; align-items: start; margin-top: 72px; }
+  .project.flip { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
   .project.flip .shots { order: 2; }
-  .shots { display: grid; gap: 12px; }
-  .shots .main { border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); box-shadow: 0 10px 30px rgba(60, 40, 20, .08); cursor: zoom-in; background: #fff; }
-  .shots .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .shots .row img { border-radius: 8px; border: 1px solid var(--rule); cursor: zoom-in; background: #fff; height: 220px; object-fit: cover; object-position: top; width: 100%; }
-  .project h3 { font-family: var(--serif); font-size: 26px; margin: 0 0 4px; }
-  .project .sub { color: var(--muted); margin: 0 0 18px; }
-  .pain { background: var(--card); border-left: 3px solid var(--rust); padding: 12px 16px; margin: 0 0 18px; font-size: 15px; }
-  .pain b { color: var(--rust); }
-  .project ul { padding-left: 20px; margin: 0 0 18px; }
-  .project li { margin-bottom: 6px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
-  .chip { font-size: 12px; padding: 3px 10px; border: 1px solid var(--rule); border-radius: 999px; background: var(--card); color: var(--muted); }
-  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border: 1px solid var(--ink); border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; }
-  .btn:hover { background: var(--ink); color: var(--paper); }
+  .shots { position: relative; }
+  .photo {
+    position: relative; margin: 0; background: #fff; padding: 7px;
+    box-shadow: var(--shadow-med);
+    transform: rotate(var(--r, 0deg));
+    transition: transform var(--t-normal) var(--ease), box-shadow var(--t-normal) var(--ease), opacity var(--t-normal) var(--ease);
+    cursor: zoom-in;
+  }
+  .photo:hover { transform: rotate(0deg) translateY(-3px); box-shadow: var(--shadow-high); z-index: 3; }
+  .photo img { width: 100%; background: #fff; }
+  .shots-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; margin-top: 28px; }
+  .shots-row .photo img { height: 230px; object-fit: cover; object-position: var(--pos, 50% 0); }
+  .shots-row .photo + .photo { margin: 22px 0 0 -18px; }
+  .shots-row.tall .photo img { height: auto; }
+  .shots-row.tall .photo + .photo { margin: 34px 0 0 -10px; }
+  .shots .hand { display: flex; align-items: flex-start; gap: 6px; width: fit-content; transform: rotate(var(--r, -2deg)); }
+  .shots .hand .scribble { width: 40px; height: 30px; flex: none; }
+  .shots .hand.right { margin: 14px 0 0 auto; }
+  .shots .hand.left { margin: 14px 0 0 12px; }
 
-  .method { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-  .step { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 22px; }
-  .step .n { font-family: var(--serif); font-size: 30px; color: var(--rust); line-height: 1; }
-  .step h4 { margin: 10px 0 8px; font-size: 17px; }
-  .step p { margin: 0; font-size: 14px; color: var(--muted); }
+  .project h3 { font-size: 30px; line-height: 1.3; position: relative; display: inline-block; }
+  .project h3 .scribble { position: absolute; left: -4px; right: -4px; bottom: -10px; width: calc(100% + 8px); height: 12px; color: var(--c); }
+  .project .sub { color: var(--muted); margin: 18px 0 22px; }
+  .worry { background: color-mix(in srgb, var(--hi) 38%, var(--card)); padding: 16px 20px 18px; box-shadow: var(--shadow-low); transform: rotate(var(--r, 1deg)); margin-bottom: 26px; font-size: 15px; line-height: 1.8; }
+  .worry .hand { display: block; font-size: 21px; margin-bottom: 2px; }
+  .checks { list-style: none; padding: 0; margin: 0 0 22px; }
+  .checks li { position: relative; padding-left: 30px; margin-bottom: 10px; font-size: 15.5px; line-height: 1.75; }
+  .checks li::before {
+    content: ""; position: absolute; left: 0; top: .35em; width: 18px; height: 16px;
+    background: var(--c);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 16'%3E%3Cpath d='M2 8.5c1.6 1.2 3 3 4 5.2C8.4 8.2 11.6 4.2 16 1.8' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 16'%3E%3Cpath d='M2 8.5c1.6 1.2 3 3 4 5.2C8.4 8.2 11.6 4.2 16 1.8' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .stack { font: 12.5px/1.7 var(--f-mono); color: var(--muted); letter-spacing: .02em; margin-bottom: 24px; }
+  .label-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: 500 16px/1 var(--f-head); text-decoration: none;
+    background: var(--card); padding: 12px 18px 11px;
+    box-shadow: var(--shadow-low);
+    transform: rotate(-1deg);
+    transition: transform var(--t-micro) var(--ease), box-shadow var(--t-micro) var(--ease);
+  }
+  .label-link .scribble { width: 26px; height: 14px; color: var(--red); }
+  .label-link:hover { transform: rotate(0deg) translateY(-2px); box-shadow: var(--shadow-med); }
 
-  .stories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-  .story { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 22px 24px; }
-  .story h4 { margin: 0 0 12px; font-family: var(--serif); font-size: 19px; }
-  .story dl { margin: 0; display: grid; grid-template-columns: 44px 1fr; gap: 6px 10px; font-size: 14px; }
-  .story dt { color: var(--rust); font-weight: 600; }
-  .story dd { margin: 0; color: #3d362e; }
+  /* ---------- 规矩 ---------- */
+  .rules-wrap { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 48px; align-items: start; margin-top: 44px; }
+  .index-card {
+    position: relative;
+    background-color: var(--card);
+    background-image:
+      linear-gradient(to right, transparent 63px, color-mix(in srgb, var(--red) 40%, transparent) 63px 64px, transparent 64px),
+      repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in srgb, var(--blue) 20%, transparent) 31px 32px);
+    background-position: 0 0, 0 24px;
+    padding: 24px 32px 32px 84px;
+    box-shadow: var(--shadow-med);
+    transform: rotate(-.5deg);
+  }
+  .clip { position: absolute; top: -22px; left: 108px; width: 22px; height: 58px; color: var(--pencil); }
+  .index-card ol { list-style: none; margin: 0; padding: 0; counter-reset: r; }
+  .index-card li { counter-increment: r; position: relative; line-height: 32px; font-size: 15.5px; }
+  .index-card li + li { margin-top: 32px; }
+  .index-card li::before { content: counter(r); position: absolute; left: -56px; top: 0; width: 30px; height: 30px; border: 2px solid var(--red); border-radius: 50% 46% 52% 48%; color: var(--red); font: 20px/27px var(--f-hand); text-align: center; transform: rotate(-6deg); }
+  .index-card h3 { font-size: 20px; line-height: 32px; }
+  .index-card p { color: var(--muted); }
+  .side-note { padding-top: 40px; }
+  .side-note .hand { font-size: 26px; line-height: 1.45; transform: rotate(2deg); }
+  .side-note .scribble { width: 70px; height: 46px; color: var(--red); margin: 10px 0 0 -6px; }
 
-  .privacy { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
-  .privacy ol { padding-left: 20px; margin: 0; }
-  .privacy li { margin-bottom: 12px; }
-  .terminal { background: #1f1b16; color: #e9e1d3; border-radius: 10px; padding: 20px 22px; font: 13px/1.8 "SF Mono", Menlo, Consolas, monospace; overflow-x: auto; white-space: pre; }
-  .terminal .ok { color: #9fc79a; }
-  .terminal .bad { color: #e48f72; }
-  .terminal .dim { color: #8d8478; }
+  /* ---------- 踩坑 ---------- */
+  .notes { columns: 3 260px; column-gap: 30px; margin-top: 52px; }
+  .pnote {
+    break-inside: avoid; display: inline-block; width: 100%; position: relative;
+    background: var(--bg, var(--card));
+    padding: 26px 22px 22px; margin: 0 0 34px;
+    box-shadow: var(--shadow-med);
+    transform: rotate(var(--r, 0deg));
+  }
+  .pnote h3 { font-size: 20px; line-height: 1.4; margin-bottom: 12px; }
+  .pnote dl { margin: 0; }
+  .pnote dt { font: 19px/1.2 var(--f-hand); color: var(--red); }
+  .pnote dd { margin: 2px 0 12px; font-size: 14.5px; line-height: 1.75; color: #3b362f; }
+  .pnote dd:last-child { margin-bottom: 0; }
+  .pin { position: absolute; top: -9px; left: 50%; width: 18px; height: 18px; border-radius: 50%; transform: translateX(-50%); background: radial-gradient(circle at 35% 30%, #fff8 0 2px, transparent 3px), var(--c, var(--red)); box-shadow: 0 3px 4px rgba(60, 40, 20, .3); }
+  .bg-yellow { --bg: color-mix(in srgb, var(--hi) 40%, var(--card)); }
+  .bg-blue { --bg: color-mix(in srgb, var(--blue) 14%, var(--card)); }
+  .bg-pink { --bg: color-mix(in srgb, var(--red) 12%, var(--card)); }
+  .bg-green { --bg: color-mix(in srgb, var(--green) 14%, var(--card)); }
 
-  footer { padding: 48px 0 64px; text-align: center; color: var(--muted); font-size: 14px; }
-  footer a { color: var(--ink); font-weight: 600; }
+  /* ---------- 开源 ---------- */
+  .ship { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 56px; align-items: start; margin-top: 40px; }
+  .ship ol { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  .ship li { counter-increment: s; position: relative; padding-left: 40px; margin-bottom: 18px; font-size: 15.5px; }
+  .ship li::before { content: counter(s); position: absolute; left: 0; top: -2px; font: 26px/1.2 var(--f-hand); color: var(--red); }
+  .ship li b { font-family: var(--f-head); font-weight: 500; font-size: 17px; }
+  .receipt-wrap { position: relative; filter: drop-shadow(0 12px 14px rgba(60, 40, 20, .22)) drop-shadow(0 1px 1px rgba(60, 40, 20, .12)); transform: rotate(var(--r, 1.4deg)); margin-top: 12px; }
+  .receipt {
+    position: relative; background: var(--card);
+    padding: 28px 24px 22px;
+    font: 12.5px/1.75 var(--f-mono); color: #3b362f; white-space: pre-wrap; word-break: break-all;
+  }
+  .receipt::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -9px; height: 10px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10'%3E%3Cpath d='M0 0 L6 9 L12 0 Z' fill='%23fffdf7'/%3E%3C/svg%3E") repeat-x;
+  }
+  .receipt .head { display: block; text-align: center; font-weight: 600; letter-spacing: .12em; }
+  .receipt .cut { display: block; border-top: 1.5px dashed var(--edge); margin: 12px 0; }
+  .receipt .ok { color: var(--green); font-weight: 600; }
+  .receipt .bad { color: var(--red); font-weight: 600; }
+  .receipt .dim { color: var(--muted); }
 
-  .lightbox { position: fixed; inset: 0; background: rgba(20, 16, 12, .86); display: none; align-items: center; justify-content: center; padding: 32px; z-index: 50; cursor: zoom-out; }
+  footer { text-align: center; padding: 56px 24px 72px; color: var(--muted); }
+  footer .hand { font-size: 28px; color: var(--ink); display: inline-block; transform: rotate(-1.5deg); }
+  footer p + p { margin-top: 10px; font-size: 15px; }
+  footer a { color: var(--ink); text-decoration-color: var(--red); text-underline-offset: 4px; }
+  footer .mini { display: flex; justify-content: center; gap: 4px; margin-top: 20px; }
+  footer .mini img { width: 54px; filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff); }
+
+  .lightbox { position: fixed; inset: 0; background: rgba(38, 35, 31, .88); display: none; align-items: center; justify-content: center; padding: 32px; z-index: 50; cursor: zoom-out; }
   .lightbox.show { display: flex; }
-  .lightbox img { max-height: 92vh; width: auto; border-radius: 8px; }
+  .lightbox img { max-height: 92vh; width: auto; background: #fff; padding: 8px; box-shadow: var(--shadow-high); }
 
-  @media (max-width: 900px) {
-    nav .links { display: none; }
-    .hero-row, .project, .project.flip, .privacy { grid-template-columns: 1fr; }
-    .project.flip .shots { order: 0; }
-    .pets img { width: 96px; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .stat:nth-child(2) { border-right: 0; }
-    .flow { grid-template-columns: 1fr; gap: 26px; }
-    .node + .node { margin-left: 0; }
-    .node + .node::before { content: "↓"; left: 50%; top: -24px; transform: translateX(-50%); }
-    .method, .stories { grid-template-columns: 1fr; }
+  /* ---------- 入场：像把纸片放下贴好 ---------- */
+  .js .reveal { transition: opacity var(--t-normal) var(--ease), transform var(--t-macro) var(--ease), box-shadow var(--t-normal) var(--ease); }
+  .js .reveal:not(.in) { opacity: 0; transform: translateY(14px) rotate(0deg); }
+  .js .hl:not(.in) { background-size: 100% 0, 0 40%; }
+  .js .draw path { transition: stroke-dashoffset var(--t-macro) var(--ease); }
+
+  @media (min-width: 1200px) { .tabs { display: flex; } }
+  @media (max-width: 1024px) {
+    .sheet { padding: 56px 40px 56px 72px; }
+    .route { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 40px; }
+    .route-line { display: none; }
+  }
+  @media (max-width: 720px) {
+    body { font-size: 15.5px; }
+    .book { padding: 20px 12px 8px; gap: 28px; }
+    .sheet { padding: 40px 20px 52px; }
+    .sheet::before { display: none; }
+    .sheet h2 { font-size: 28px; }
+    .folio { right: 20px; bottom: 16px; }
+    .cover, .project, .project.flip, .rules-wrap, .ship { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .project { margin-top: 56px; }
+    .project .shots, .project.flip .shots { order: 2; }
+    .shots .hand { font-size: 19px; }
+    .shots .hand br { display: none; }
+    .sticker { width: 112px; }
+    .route { grid-template-columns: minmax(0, 1fr); gap: 20px; padding-left: 22px; border-left: 2.5px dotted var(--edge); }
+    .stop { --y: 0 !important; }
+    .shots-row .photo img { height: 170px; }
+    .toc { padding: 14px 18px 18px; }
+    .side-note { padding-top: 0; }
+    .side-note .scribble { display: none; }
+    .index-card { padding: 20px 18px 24px 64px; background-image: linear-gradient(to right, transparent 47px, color-mix(in srgb, var(--red) 40%, transparent) 47px 48px, transparent 48px), repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in srgb, var(--blue) 20%, transparent) 31px 32px); background-position: 0 0, 0 20px; }
+    .index-card li::before { left: -50px; }
+    .clip { left: 80px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition: none !important; animation: none !important; }
   }
 </style>
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="#"><img src="assets/pet-kanban.png" alt="">oxygenxx77</a>
-    <div class="links">
-      <a href="#flow">工作流</a>
-      <a href="#projects">项目</a>
-      <a href="#method">方法</a>
-      <a href="#stories">迭代故事</a>
-      <a href="#privacy">发布与隐私</a>
-      <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">GitHub ↗</a>
-    </div>
-  </div>
+<nav class="tabs" aria-label="目录">
+  <a href="#route" style="--c: var(--teal)">路线</a>
+  <a href="#tools" style="--c: var(--red)">工具</a>
+  <a href="#rules" style="--c: var(--gold)">规矩</a>
+  <a href="#pits" style="--c: var(--blue)">踩坑</a>
+  <a href="#ship" style="--c: var(--green)">开源</a>
 </nav>
 
-<header class="hero">
-  <div class="wrap">
-    <div class="hero-row">
+<main class="book">
+
+  <!-- 封面 -->
+  <header class="sheet" id="top">
+    <div class="cover">
       <div>
-        <div class="eyebrow">Vibe Coding Portfolio</div>
-        <h1>不是科班程序员，<br>但我用 AI 把<em>自己的求职</em><br>做成了一套工具</h1>
-        <p class="lead">运营 / 产品背景。秋招期间，我把每天重复的找岗位、筛岗位、填网申、追进度，交给和 AI 结对写出来的工具：从需求、交互到排查 bug 都是我主导，代码由 AI 落地，每个功能都在我自己的求职里天天用、天天改。</p>
-      </div>
-      <div class="pets">
-        <img src="assets/pet-jobhunter.png" alt="桌宠小航">
-        <img src="assets/pet-kanban.png" alt="桌宠小招">
-      </div>
-    </div>
-    <div class="stats">
-      <div class="stat"><b>3 + 2</b><span>个工具 + 只桌宠</span></div>
-      <div class="stat"><b>16,000+</b><span>行代码</span></div>
-      <div class="stat"><b>5</b><span>种语言：Python / JS / HTML·CSS / Swift / SQL</span></div>
-      <div class="stat"><b>2</b><span>个 AI 助手，能直接改数据、可撤销</span></div>
-    </div>
-  </div>
-</header>
+        <div class="kicker">oxygenxx77 的秋招手帐</div>
+        <h1>一边找工作，<br><span class="nowrap">一边给自己<span class="hl">做工具</span></span></h1>
+        <div class="intro">
+          <p>我学的不是计算机，求职方向是运营和产品。秋招这段时间，每天都在重复几件事：翻岗位，判断值不值得投，把同一份简历填进一个又一个网申系统，再记住哪家的测评快截止了。</p>
+          <p>后来我开始和 AI 一起，把这些事一件件做成工具。做什么、做成什么样、哪里不对劲，由我来定；代码交给 AI 写。每个功能都在我自己的求职里天天用，用着不顺手，就接着改。</p>
+        </div>
+        <p class="gh">代码都在 <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">github.com/oxygenxx77</a></p>
 
-<section id="flow">
-  <div class="wrap">
-    <div class="eyebrow">The Workflow</div>
-    <h2>一条完整的求职工作流</h2>
-    <p class="section-lead">三个工具各管一段，数据互通：在一个地方标记「已投递」，另外两个地方同步更新；两个 AI 助手也能看到彼此的数据。</p>
-    <div class="flow">
-      <div class="node jh"><div class="tag">浏览器扩展</div><h4>采集岗位</h4><p>在牛客一键采集岗位，或按公司拉取全部在招岗位</p></div>
-      <div class="node jh"><div class="tag">求职助手</div><h4>AI 打分 · 推荐</h4><p>按简历、方向、城市打分，按公司推荐前 3 个</p></div>
-      <div class="node af"><div class="tag">简历自动填充</div><h4>填网申</h4><p>识别当前岗位，一键填表，AI 写自我评价和开放题</p></div>
-      <div class="node jh"><div class="tag">求职助手</div><h4>标记已投递</h4><p>受每日上限约束，自动同步到秋招看板</p></div>
-      <div class="node kb"><div class="tag">秋招看板</div><h4>测评 · 面试 · Offer</h4><p>说一句话更新进度，日历订阅、微信提醒</p></div>
-    </div>
-    <p class="flow-note">🖥 两只桌宠「小航」和「小招」常驻桌面：单击启动对应服务并打开页面，悬停看今天的待办。</p>
-  </div>
-</section>
-
-<section id="projects">
-  <div class="wrap">
-    <div class="eyebrow">Projects</div>
-    <h2>项目</h2>
-    <p class="section-lead">截图里的岗位、简历和对话都是用脚本生成的虚构数据。</p>
-
-    <article class="project">
-      <div class="shots">
-        <img class="main" src="assets/jh-list.jpg" alt="求职助手岗位列表">
-        <div class="row">
-          <img src="assets/jh-companies.jpg" alt="按公司推荐">
-          <img src="assets/jh-chat.jpg" alt="AI 求职顾问">
+        <div class="toc reveal" style="--r: -.6deg">
+          <span class="tape t-teal" style="left: 40%; --tr: 2deg"></span>
+          <h3>目录</h3>
+          <ol>
+            <li><a href="#route">从找岗位到拿 Offer</a><span class="dots"></span><span class="pg">1</span></li>
+            <li><a href="#tools">三个工具</a><span class="dots"></span><span class="pg">2</span></li>
+            <li><a href="#rules">我和 AI 合作的四条规矩</a><span class="dots"></span><span class="pg">3</span></li>
+            <li><a href="#pits">踩过的坑</a><span class="dots"></span><span class="pg">4</span></li>
+            <li><a href="#ship">开源之前做的事</a><span class="dots"></span><span class="pg">5</span></li>
+          </ol>
         </div>
       </div>
+
+      <div class="desk-corner">
+        <div class="stickers">
+          <img class="sticker" style="--r: -8deg" src="assets/pet-jobhunter.png" alt="桌宠小航">
+          <img class="sticker" style="--r: 6deg; margin-top: 26px" src="assets/pet-kanban.png" alt="桌宠小招">
+        </div>
+        <div class="pet-note">
+          <svg class="scribble draw" viewBox="0 0 46 34" aria-hidden="true"><path d="M42 30C30 31 14 26 8 6"/><path d="M3 13L8 5L14 11"/></svg>
+          <p class="hand">小航和小招，<br>一直住在我的桌面上</p>
+        </div>
+        <div class="sticky reveal" style="--r: 2deg">
+          <span class="tape t-red dots" style="left: 34%; --tr: -3deg"></span>
+          <h3>数一数</h3>
+          <ul>
+            <li><b>3</b> 个工具，<b>2</b> 只桌宠</li>
+            <li>约 <b>1.6 万</b>行代码</li>
+            <li><b>5</b> 种语言：Python、JavaScript、HTML/CSS、Swift、SQL</li>
+            <li><b>2</b> 个能直接改数据的 AI 助手，改错了能撤销</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <span class="folio">封面</span>
+  </header>
+
+  <!-- 1 路线 -->
+  <section class="sheet" id="route">
+    <div class="kicker">第 1 页 · 路线图</div>
+    <h2>从找岗位到拿 Offer</h2>
+    <p class="lead">三个工具各管一段，数据是通的：在任何一处标记「已投递」，另外两处都会跟着更新；两个 AI 助手也能看到彼此那边的数据。</p>
+    <div class="route">
+      <svg class="route-line scribble" viewBox="0 0 1000 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50C90 20 150 78 250 46S410 18 500 50S660 82 750 44S900 22 1000 48"/></svg>
+      <div class="stop reveal" style="--c: var(--blue); --y: -10px; --r: -1.5deg"><span class="tape t-blue" style="left: 28%; --tr: -5deg"></span><div class="who">浏览器扩展</div><h3>采集岗位</h3><p>在牛客一键采集，或者把一家公司在招的岗位全拉下来</p></div>
+      <div class="stop reveal" style="--c: var(--blue); --y: 14px; --r: 1.2deg"><span class="tape t-blue" style="left: 30%; --tr: 4deg"></span><div class="who">求职助手</div><h3>AI 打分、推荐</h3><p>按简历、方向、城市打分，每家公司推荐前 3 个</p></div>
+      <div class="stop reveal" style="--c: var(--gold); --y: -6px; --r: -.8deg"><span class="tape t-gold" style="left: 26%; --tr: -3deg"></span><div class="who">简历自动填充</div><h3>填网申</h3><p>认出当前是哪个岗位，一键填表，自我评价和开放题让 AI 起草</p></div>
+      <div class="stop reveal" style="--c: var(--blue); --y: 12px; --r: 1.6deg"><span class="tape t-blue" style="left: 32%; --tr: 5deg"></span><div class="who">求职助手</div><h3>标记已投递</h3><p>每天有投递上限，标记后自动进看板</p></div>
+      <div class="stop reveal" style="--c: var(--red); --y: -12px; --r: -1.2deg"><span class="tape t-red" style="left: 28%; --tr: -4deg"></span><div class="who">秋招看板</div><h3>测评、面试、Offer</h3><p>说一句话就能更新进度，有日历订阅和微信提醒</p></div>
+    </div>
+    <p class="route-foot"><img src="assets/pet-kanban.png" alt="">桌面上还有两只桌宠：点一下就启动对应的服务、打开页面；鼠标停在上面，能看到今天的待办。</p>
+    <span class="folio">第 1 页</span>
+  </section>
+
+  <!-- 2 工具 -->
+  <section class="sheet" id="tools">
+    <div class="kicker">第 2 页 · 工具</div>
+    <h2>三个工具</h2>
+    <p class="lead">截图里的岗位、简历和对话，都是用脚本造的假数据。点截图可以看大图。</p>
+
+    <article class="project" style="--c: var(--blue)">
+      <div class="shots">
+        <figure class="photo reveal" style="--r: -1.2deg">
+          <span class="tape t-blue" style="left: 8%; --tr: -8deg"></span><span class="tape t-blue" style="right: 8%; --tr: 6deg"></span>
+          <img src="assets/jh-list.jpg" alt="求职助手的岗位列表">
+        </figure>
+        <p class="hand right" style="--r: -2deg"><svg class="scribble draw" viewBox="0 0 40 30" aria-hidden="true"><path d="M36 27C26 25 14 20 7 4"/><path d="M3 10L7 3L13 8"/></svg>匹配分、AI 的建议和看板进度，<br>都在同一行</p>
+        <div class="shots-row">
+          <figure class="photo reveal" style="--r: 2deg"><span class="tape t-gold" style="left: 30%; --tr: 3deg"></span><img src="assets/jh-companies.jpg" alt="按公司推荐"></figure>
+          <figure class="photo reveal" style="--r: -2.4deg; --pos: 50% 64%"><span class="tape t-blue dots" style="left: 34%; --tr: -5deg"></span><img src="assets/jh-chat.jpg" alt="AI 求职顾问"></figure>
+        </div>
+        <p class="hand left" style="--r: 1.5deg"><svg class="scribble draw" viewBox="0 0 40 30" aria-hidden="true"><path d="M4 27C16 26 28 20 33 4"/><path d="M27 9L33 3L37 11"/></svg>对它说「都标记为待投递」，<br>它真的会去改</p>
+      </div>
       <div>
-        <h3>🧭 求职助手</h3>
-        <p class="sub">采集岗位 → AI 匹配 → 按公司推荐 → 辅助投递</p>
-        <p class="pain"><b>痛点：</b>牛客上几百个岗位，一个个点开看 JD、对照简历判断值不值得投，一晚上也看不完几家。</p>
-        <ul>
-          <li>AI 按「简历 50% + 偏好 30% + 城市 20%」分项打分，最终分由后端加权，避免模型算错</li>
-          <li>按公司推荐：AI 匹配、岗位方向、城市、公司规模、title 加权排序，支持「运营>营销=产品」式优先级</li>
-          <li>AI 顾问通过工具调用直接改数据：「把北京的岗位都标记为拒绝」</li>
-          <li>AI 失败自动退避重试，最终退化为本地规则打分；每日投递上限防止滥投</li>
-          <li>限投数没用 AI 估算：实测同一家公司问两次结果不一样，改为手填</li>
+        <h3>求职助手<svg class="scribble draw" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8C40 3 80 10 120 6S180 4 198 7"/></svg></h3>
+        <p class="sub">采集岗位、AI 匹配、按公司推荐、辅助投递</p>
+        <div class="worry" style="--r: 1deg"><span class="hand">当初的烦恼</span>牛客上几百个岗位，一个个点开看 JD、对着简历判断值不值得投，一晚上也看不完几家。</div>
+        <ul class="checks">
+          <li>AI 分三项打分：简历 50%、偏好 30%、城市 20%。最后的总分由后端加权，不让模型自己算</li>
+          <li>按公司推荐：综合匹配分、岗位方向、城市、公司规模和岗位名称排序，方向可以写成「运营&gt;营销=产品」这样的优先级</li>
+          <li>对 AI 顾问说「把北京的岗位都标记为拒绝」，它会直接调用工具改数据</li>
+          <li>AI 调用失败会退避重试，实在不行就用本地规则打分；每天的投递数有上限，防止乱投</li>
+          <li>「每家公司限投几个岗位」没让 AI 估：同一家公司问两次，给的数字都不一样，所以改成手填</li>
         </ul>
-        <div class="chips"><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">OpenAI 兼容接口 · Function Calling</span><span class="chip">Chrome 扩展 MV3</span><span class="chip">Swift / SwiftUI</span></div>
-        <a class="btn" href="https://github.com/oxygenxx77/job-hunter" target="_blank" rel="noopener">查看代码 ↗</a>
+        <p class="stack">用到：FastAPI · SQLite · OpenAI 兼容接口（function calling）· Chrome 扩展 MV3 · Swift / SwiftUI</p>
+        <a class="label-link" href="https://github.com/oxygenxx77/job-hunter" target="_blank" rel="noopener">去 GitHub 看代码<svg class="scribble" viewBox="0 0 26 14" aria-hidden="true"><path d="M2 7.5C9 6.5 16 7.5 23 7"/><path d="M18 2.5L23.5 7L18.5 11.5"/></svg></a>
       </div>
     </article>
 
-    <article class="project flip">
+    <article class="project flip" style="--c: var(--red)">
       <div class="shots">
-        <img class="main" src="assets/kanban-board.jpg" alt="秋招看板总览">
-        <div class="row">
-          <img src="assets/kanban-cards.jpg" alt="公司卡片">
-          <img src="assets/kanban-chat.jpg" alt="小招">
+        <figure class="photo reveal" style="--r: 1.1deg">
+          <span class="tape t-red" style="left: 10%; --tr: 7deg"></span><span class="tape t-red" style="right: 9%; --tr: -5deg"></span>
+          <img src="assets/kanban-board.jpg" alt="秋招看板总览">
+        </figure>
+        <p class="hand left" style="--r: -1.5deg"><svg class="scribble draw" viewBox="0 0 40 30" aria-hidden="true"><path d="M4 27C16 26 28 20 33 4"/><path d="M27 9L33 3L37 11"/></svg>今天要做的事，放在最上面</p>
+        <div class="shots-row">
+          <figure class="photo reveal" style="--r: -2deg"><span class="tape t-gold" style="left: 30%; --tr: -4deg"></span><img src="assets/kanban-cards.jpg" alt="公司卡片"></figure>
+          <figure class="photo reveal" style="--r: 2.6deg; --pos: 50% 34%"><span class="tape t-red dots" style="left: 32%; --tr: 4deg"></span><img src="assets/kanban-chat.jpg" alt="AI 助手小招"></figure>
         </div>
+        <p class="hand right" style="--r: 2deg"><svg class="scribble draw" viewBox="0 0 40 30" aria-hidden="true"><path d="M36 27C26 25 14 20 7 4"/><path d="M3 10L7 3L13 8"/></svg>说一句话，改了哪几处<br>都列在回复下面</p>
       </div>
       <div>
-        <h3>🍂 秋招看板</h3>
-        <p class="sub">管投递之后的一切：测评截止、面试、等结果、Offer</p>
-        <p class="pain"><b>痛点：</b>投了几十家以后，哪家测评快截止、哪家约了几面、哪家该催进度，记在备忘录里全乱了。</p>
-        <ul>
-          <li>AI 助手「小招」：说「美团约了二面，周五下午三点」就自动记面试、改状态</li>
-          <li>每次 AI 修改前存快照，一键撤销；撤销前检查中间有没有别的改动</li>
-          <li>AI 声称「已更新」却没调用工具时，后端自动追问一次，防止只嘴上答应</li>
-          <li>iCal 日历订阅 + 微信提醒 + 周报 + 面试模拟</li>
-          <li>数据同步到 SQLite，内置 SQL 练习，还能和求职助手的岗位库跨库 JOIN</li>
+        <h3>秋招看板<svg class="scribble draw" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6C50 9 90 3 130 7S180 9 198 5"/></svg></h3>
+        <p class="sub">管投递之后的事：测评截止、面试、等结果、Offer</p>
+        <div class="worry" style="--r: -1.2deg"><span class="hand">当初的烦恼</span>投了几十家以后，哪家测评快截止了、哪家约到了几面、哪家该去问进度，记在备忘录里全乱了。</div>
+        <ul class="checks">
+          <li>AI 助手「小招」：说一句「美团约了二面，周五下午三点」，它就记下面试、改好状态</li>
+          <li>每次 AI 改数据前先存快照，可以一键撤销；撤销前会检查这期间有没有别的改动</li>
+          <li>AI 回复「已更新」却没真的调用工具时，后端会自动追问一次，免得它只是嘴上答应</li>
+          <li>日历订阅、微信提醒、周报、模拟面试</li>
+          <li>数据同步到 SQLite，内置 SQL 练习题，还能和求职助手的岗位库跨库 JOIN</li>
         </ul>
-        <div class="chips"><span class="chip">FastAPI</span><span class="chip">JSON 原子写入 + 自动备份</span><span class="chip">Chart.js</span><span class="chip">iCal</span><span class="chip">SQLite</span></div>
-        <a class="btn" href="https://github.com/oxygenxx77/qiuzhao-kanban" target="_blank" rel="noopener">查看代码 ↗</a>
+        <p class="stack">用到：FastAPI · JSON 原子写入 + 自动备份 · Chart.js · iCal · SQLite</p>
+        <a class="label-link" href="https://github.com/oxygenxx77/qiuzhao-kanban" target="_blank" rel="noopener">去 GitHub 看代码<svg class="scribble" viewBox="0 0 26 14" aria-hidden="true"><path d="M2 7.5C9 6.5 16 7.5 23 7"/><path d="M18 2.5L23.5 7L18.5 11.5"/></svg></a>
       </div>
     </article>
 
-    <article class="project">
+    <article class="project" style="--c: var(--gold)">
       <div class="shots">
-        <div class="row" style="grid-template-columns: 1fr 1.2fr; align-items: start;">
-          <img src="assets/autofill-popup.jpg" alt="扩展弹窗" style="height: auto;">
-          <img src="assets/autofill-options.jpg" alt="简历编辑页" style="height: auto;">
+        <div class="shots-row tall">
+          <figure class="photo reveal" style="--r: -1.8deg"><span class="tape t-gold" style="left: 26%; --tr: -6deg"></span><img src="assets/autofill-popup.jpg" alt="扩展弹窗"></figure>
+          <figure class="photo reveal" style="--r: 1.6deg"><span class="tape t-teal" style="left: 34%; --tr: 4deg"></span><img src="assets/autofill-options.jpg" alt="简历编辑页"></figure>
         </div>
+        <p class="hand left" style="--r: -1.5deg"><svg class="scribble draw" viewBox="0 0 40 30" aria-hidden="true"><path d="M4 27C16 26 28 20 33 4"/><path d="M27 9L33 3L37 11"/></svg>先认出是哪个岗位，再按这个岗位来填；<br>PDF 解析出来的内容，先给我核对再保存</p>
       </div>
       <div>
-        <h3>📝 简历自动填充</h3>
-        <p class="sub">PDF 简历解析 + 网申表单一键填写</p>
-        <p class="pain"><b>痛点：</b>每家公司的网申系统都要把同一份简历重新填一遍，教育、实习、项目要一条条点「添加」，学校、省市还是难点的下拉框。</p>
-        <ul>
-          <li>本地用 pdf.js 解析简历，按版块抽取字段</li>
-          <li>按标签关键词匹配字段，取最长命中，避免「学校所在地」被当成学校名</li>
-          <li>处理 React / Vue 受控输入、可搜索下拉、省市区联动、日期面板等自定义组件</li>
-          <li>以控件上实际显示的文字判断是否选上，而不是「点过就算」</li>
-          <li>和求职助手联动：识别当前岗位、AI 写文书、投完一键标记</li>
+        <h3>简历自动填充<svg class="scribble draw" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7C40 4 100 9 140 5S185 6 198 8"/></svg></h3>
+        <p class="sub">解析 PDF 简历，一键填网申</p>
+        <div class="worry" style="--r: .8deg"><span class="hand">当初的烦恼</span>每家公司的网申都要把同一份简历重新填一遍，教育、实习、项目得一条条点「添加」，学校和省市还是最难选的下拉框。</div>
+        <ul class="checks">
+          <li>用 pdf.js 在本地解析简历，按版块抽出字段</li>
+          <li>按标签里的关键词匹配字段，取最长的那个，免得「学校所在地」被当成学校名</li>
+          <li>能处理 React / Vue 的受控输入框、可搜索的下拉框、省市区联动和日期面板</li>
+          <li>以控件上实际显示的文字为准判断有没有选上，而不是「点过就算」</li>
+          <li>和求职助手联动：认出当前岗位、让 AI 写文书、投完一键标记</li>
         </ul>
-        <div class="chips"><span class="chip">Chrome 扩展 MV3</span><span class="chip">pdf.js</span><span class="chip">DOM 自动化</span></div>
-        <a class="btn" href="https://github.com/oxygenxx77/resume-autofill" target="_blank" rel="noopener">查看代码 ↗</a>
+        <p class="stack">用到：Chrome 扩展 MV3 · pdf.js · DOM 自动化</p>
+        <a class="label-link" href="https://github.com/oxygenxx77/resume-autofill" target="_blank" rel="noopener">去 GitHub 看代码<svg class="scribble" viewBox="0 0 26 14" aria-hidden="true"><path d="M2 7.5C9 6.5 16 7.5 23 7"/><path d="M18 2.5L23.5 7L18.5 11.5"/></svg></a>
       </div>
     </article>
-  </div>
-</section>
+    <span class="folio">第 2 页</span>
+  </section>
 
-<section id="method">
-  <div class="wrap">
-    <div class="eyebrow">How I Vibe Code</div>
-    <h2>我怎么和 AI 一起写代码</h2>
-    <p class="section-lead">AI 负责写代码，我负责「做什么、为什么、做得对不对」。</p>
-    <div class="method">
-      <div class="step"><div class="n">01</div><h4>从真实痛点出发</h4><p>每个功能都来自我自己求职时卡住的地方，做完马上自己用，好不好用一天就知道。</p></div>
-      <div class="step"><div class="n">02</div><h4>用产品语言提需求</h4><p>讲清楚场景、期望结果和边界情况（比如「腾讯」不能算到「腾讯音乐」头上），而不是指定怎么写代码。</p></div>
-      <div class="step"><div class="n">03</div><h4>带着证据去排查</h4><p>出 bug 时截图、描述复现步骤，让 AI 先定位原因再改；改完自己按原步骤验收。</p></div>
-      <div class="step"><div class="n">04</div><h4>把规则沉淀下来</h4><p>设计取舍写进 README，隐私规则写成检查脚本和提交钩子，下次不靠记性。</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="stories">
-  <div class="wrap">
-    <div class="eyebrow">Iteration Stories</div>
-    <h2>迭代故事</h2>
-    <p class="section-lead">比起一次写对，更能体现能力的是：发现问题、找到原因、做出取舍。</p>
-    <div class="stories">
-      <div class="story">
-        <h4>「确认投递」点了没反应？</h4>
-        <dl>
-          <dt>现象</dt><dd>点「确认投递」后岗位还停在「待投递」，以为是 bug。</dd>
-          <dt>原因</dt><dd>按钮其实只是「加入待投递」，名字和行为对不上。</dd>
-          <dt>解决</dt><dd>改名，并新增「📮 标记已投递」，在官网投过的岗位也能直接标记。问题出在交互语义，而不是代码。</dd>
-        </dl>
+  <!-- 3 规矩 -->
+  <section class="sheet" id="rules">
+    <div class="kicker">第 3 页 · 规矩</div>
+    <h2>我和 AI 合作的四条规矩</h2>
+    <div class="rules-wrap">
+      <div class="index-card reveal" style="--r: -.5deg">
+        <svg class="clip scribble" viewBox="0 0 22 58" aria-hidden="true"><path d="M7 40V9a4 4 0 0 1 8 0v36a6 6 0 0 1-12 0V14"/></svg>
+        <ol>
+          <li><h3>从自己卡住的地方出发</h3><p>每个功能都来自我求职时真的卡住的地方。做完马上自己用，好不好用，一天就知道。</p></li>
+          <li><h3>用产品的话提需求</h3><p>讲清楚场景、想要的结果和边界情况（比如「腾讯」的岗位不能算到「腾讯音乐」头上），而不是告诉它代码怎么写。</p></li>
+          <li><h3>带着证据排查问题</h3><p>出了 bug 先截图、写下复现步骤，让 AI 先找原因再动手改；改完我按原来的步骤再走一遍。</p></li>
+          <li><h3>把规矩写下来</h3><p>设计上的取舍写进 README，隐私规则写成检查脚本和提交钩子，下次不用靠记性。</p></li>
+        </ol>
       </div>
-      <div class="story">
-        <h4>AI 说「已更新」，看板却没变</h4>
-        <dl>
-          <dt>现象</dt><dd>小招偶尔回复「已经帮你改好了」，实际什么都没改。</dd>
-          <dt>原因</dt><dd>模型有时直接用文字回复，跳过了工具调用。</dd>
-          <dt>解决</dt><dd>后端检测「声称修改但没有成功的工具调用」，自动追问一次；每条修改都列在回复下方，用户能核对、能撤销。</dd>
-        </dl>
-      </div>
-      <div class="story">
-        <h4>桌宠点了一直转圈</h4>
-        <dl>
-          <dt>现象</dt><dd>双击桌宠后服务一直起不来，日志里也没有报错。</dd>
-          <dt>原因</dt><dd>项目在「桌面」文件夹里，macOS 在后台等用户授权，Python 卡在读文件那一步。</dd>
-          <dt>解决</dt><dd>启动超过 6 秒就提示去点系统弹窗的「好」；顺手修了状态卡在「启动中」的问题。</dd>
-        </dl>
-      </div>
-      <div class="story">
-        <h4>限投数为什么不让 AI 估</h4>
-        <dl>
-          <dt>想法</dt><dd>很多公司限投 2~3 个岗位，想让 AI 查出来自动提醒。</dd>
-          <dt>实测</dt><dd>同一家公司连问两次，AI 给的数字都不一样。</dd>
-          <dt>取舍</dt><dd>改为手填，并在卡片上放校招公告链接方便查。不可靠的数据不如没有。</dd>
-        </dl>
-      </div>
-      <div class="story">
-        <h4>「腾讯」不是「腾讯音乐」</h4>
-        <dl>
-          <dt>需求</dt><dd>求职助手和看板要认出同一家公司：「广州小鹏汽车科技有限公司」就是「小鹏」。</dd>
-          <dt>坑</dt><dd>简单的包含匹配会把「腾讯」的岗位算到「腾讯音乐」的卡片上。</dd>
-          <dt>解决</dt><dd>去掉城市前缀和「有限公司 / 集团 / 科技」后缀再比，完全相同优先，有歧义时不猜。</dd>
-        </dl>
-      </div>
-      <div class="story">
-        <h4>把自己的工具开源，又不泄露自己</h4>
-        <dl>
-          <dt>问题</dt><dd>工具里全是真实简历、投递记录、API Key，代码里还写死了本机路径。</dd>
-          <dt>方案</dt><dd>白名单式 .gitignore、本地隐私扫描器、提交前自动检查，再用虚构数据重新截图。</dd>
-          <dt>细节</dt><dd>旧提交里带着本机路径和真实邮箱，于是重建了干净的提交历史。</dd>
-        </dl>
+      <div class="side-note">
+        <p class="hand">代码交给 AI 写；<br>做什么、为什么做、<br>做得对不对，<br>由我来判断。</p>
+        <svg class="scribble draw" viewBox="0 0 70 46" aria-hidden="true"><path d="M64 6C50 4 22 10 10 38"/><path d="M5 30L10 39L19 34"/></svg>
       </div>
     </div>
-  </div>
-</section>
+    <span class="folio">第 3 页</span>
+  </section>
 
-<section id="privacy">
-  <div class="wrap privacy">
-    <div>
-      <div class="eyebrow">Shipping Safely</div>
-      <h2>发布与隐私</h2>
-      <p class="section-lead" style="margin-bottom: 24px;">工具每天处理的都是简历、联系方式和求职进度，所以「开源」这一步本身也当成一个需求来做：</p>
+  <!-- 4 踩坑 -->
+  <section class="sheet" id="pits">
+    <div class="kicker">第 4 页 · 踩坑</div>
+    <h2>踩过的坑</h2>
+    <p class="lead">一次就写对的功能不多。更值得记下来的，是怎么发现问题、找到原因、做出取舍。</p>
+    <div class="notes">
+      <div class="pnote bg-yellow reveal" style="--r: -1.4deg"><span class="pin"></span>
+        <h3>「确认投递」点了没反应？</h3>
+        <dl><dt>现象</dt><dd>点了「确认投递」，岗位还停在「待投递」，我以为是 bug。</dd>
+        <dt>原因</dt><dd>这个按钮其实只是「加入待投递」，名字和行为对不上。</dd>
+        <dt>解决</dt><dd>改了名字，又加了「标记已投递」，在官网投过的岗位也能直接标记。问题出在交互的语义上，不在代码。</dd></dl>
+      </div>
+      <div class="pnote bg-blue reveal" style="--r: 1.2deg"><span class="pin" style="--c: var(--blue)"></span>
+        <h3>AI 说「已更新」，看板却没变</h3>
+        <dl><dt>现象</dt><dd>小招偶尔回复「已经帮你改好了」，实际上什么都没改。</dd>
+        <dt>原因</dt><dd>模型有时直接用文字回答，跳过了工具调用。</dd>
+        <dt>解决</dt><dd>后端检测「说改了但没有成功的工具调用」，自动追问一次；每条修改都列在回复下面，可以核对，也可以撤销。</dd></dl>
+      </div>
+      <div class="pnote reveal" style="--r: -.8deg"><span class="tape t-green" style="left: 34%; --tr: -3deg"></span>
+        <h3>桌宠点了一直转圈</h3>
+        <dl><dt>现象</dt><dd>双击桌宠后服务一直起不来，日志里也没有报错。</dd>
+        <dt>原因</dt><dd>项目放在「桌面」文件夹里，macOS 在后台等用户授权，Python 卡在读文件那一步。</dd>
+        <dt>解决</dt><dd>启动超过 6 秒，就提示去点系统弹窗里的「好」；顺手修了状态卡在「启动中」的问题。</dd></dl>
+      </div>
+      <div class="pnote bg-pink reveal" style="--r: 1.6deg"><span class="pin" style="--c: var(--teal)"></span>
+        <h3>限投数为什么不让 AI 估</h3>
+        <dl><dt>想法</dt><dd>很多公司只让投 2～3 个岗位，想让 AI 查出来自动提醒。</dd>
+        <dt>实测</dt><dd>同一家公司连问两次，AI 给的数字都不一样。</dd>
+        <dt>取舍</dt><dd>改成手填，在卡片上放校招公告的链接方便查。不可靠的数据，不如没有。</dd></dl>
+      </div>
+      <div class="pnote bg-green reveal" style="--r: -1.8deg"><span class="pin" style="--c: var(--gold)"></span>
+        <h3>「腾讯」不是「腾讯音乐」</h3>
+        <dl><dt>需求</dt><dd>求职助手和看板要认出同一家公司：「广州小鹏汽车科技有限公司」就是「小鹏」。</dd>
+        <dt>坑</dt><dd>简单的包含匹配，会把「腾讯」的岗位算到「腾讯音乐」的卡片上。</dd>
+        <dt>解决</dt><dd>先去掉城市前缀和「有限公司 / 集团 / 科技」这类后缀再比，完全相同的优先，有歧义就不猜。</dd></dl>
+      </div>
+      <div class="pnote bg-yellow reveal" style="--r: .9deg"><span class="tape t-red" style="left: 30%; --tr: 4deg"></span>
+        <h3>把工具开源，又不把自己泄露出去</h3>
+        <dl><dt>问题</dt><dd>工具里全是真实的简历、投递记录和 API Key，代码里还写死了本机路径。</dd>
+        <dt>办法</dt><dd>白名单式的 .gitignore、本地隐私扫描器、提交前自动检查，再用假数据重新截图。</dd>
+        <dt>细节</dt><dd>旧的提交里带着本机路径和真实邮箱，于是重建了一份干净的提交历史。</dd></dl>
+      </div>
+    </div>
+    <span class="folio">第 4 页</span>
+  </section>
+
+  <!-- 5 开源 -->
+  <section class="sheet" id="ship">
+    <div class="kicker">第 5 页 · 开源</div>
+    <h2>开源之前做的事</h2>
+    <p class="lead">这些工具每天处理的都是简历、联系方式和求职进度，所以把它们公开出来，这件事本身我也当成一个需求来做：</p>
+    <div class="ship">
       <ol>
-        <li><b>白名单式 .gitignore</b>：默认忽略一切，只放行代码、示例和文档，新增的数据文件不会被误提交</li>
-        <li><b>本地隐私扫描器</b>：运行时从本机简历和 .env 读出敏感值（姓名、电话、实习公司、Key），逐行比对待提交的文件；只报「文件:行号 + 类型」，不把隐私打印出来</li>
-        <li><b>提交前钩子</b>：每次 git commit 自动扫描，发现问题直接拒绝提交</li>
-        <li><b>虚构演示数据</b>：求职助手和看板各带一个造数据脚本，扩展截图用模拟的浏览器接口加虚构简历；造数据脚本拒绝写入已有真实数据的目录</li>
-        <li><b>匿名提交身份</b>：提交作者用 GitHub 的 noreply 邮箱</li>
+        <li><b>白名单式 .gitignore</b>：默认忽略所有文件，只放行代码、示例和文档，以后新增的数据文件也不会被误提交</li>
+        <li><b>本地隐私扫描器</b>：运行时从本机的简历和 .env 里读出敏感信息（姓名、电话、实习公司、Key），逐行比对要提交的文件；只报「文件:行号 + 类型」，不把隐私本身打印出来</li>
+        <li><b>提交前钩子</b>：每次 git commit 都自动扫描，发现问题直接拒绝提交</li>
+        <li><b>假数据截图</b>：求职助手和看板各带一个造数据的脚本，扩展截图用模拟的浏览器接口加一份虚构的简历；造数据脚本不会写进已有真实数据的目录</li>
+        <li><b>匿名身份</b>：提交作者用 GitHub 的 noreply 邮箱，所有仓库以 MIT 许可证开源</li>
       </ol>
+      <div class="receipt-wrap reveal" style="--r: 1.4deg">
+        <span class="tape t-teal" style="left: 38%; --tr: -2deg"></span>
+        <div class="receipt"><span class="head">隐私检查 · 提交前</span><span class="cut"></span><span class="dim">$ git commit -m "update"</span>
+<span class="bad">✗ 发现 2 处疑似隐私信息</span>
+<span class="dim">（只显示位置，不显示内容）</span>
+  a.py:1       本机路径（含用户名）
+  resume.json  简历数据不应提交
+<span class="dim">确认是误报的行，加上 privacy-ok 注释即可跳过。</span><span class="cut"></span><span class="dim">$ git commit -m "init"</span>
+<span class="ok">✓ 隐私检查通过</span>
+  比对了 14 个本机敏感值 + 通用规则</div>
+      </div>
     </div>
-    <div class="terminal"><span class="dim">$ git commit -m "update"</span>
-<span class="bad">✗ 发现 2 处疑似隐私信息（只显示位置，不显示内容）：</span>
-  a.py:1        本机路径（含用户名）
-  resume.json   简历数据不应提交
-<span class="dim">确认是误报的行，加上 privacy-ok 注释即可跳过。</span>
+    <span class="folio">第 5 页</span>
+  </section>
 
-<span class="dim">$ git commit -m "init"</span>
-<span class="ok">✓ 隐私检查通过（比对了 14 个本机敏感值 + 通用规则）</span></div>
-  </div>
-</section>
+</main>
 
 <footer>
-  <div class="wrap">
-    <p>代码都在 <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">github.com/oxygenxx77</a></p>
-  </div>
+  <p class="hand">这本手帐，先写到这里。</p>
+  <p>代码都在 <a href="https://github.com/oxygenxx77" target="_blank" rel="noopener">github.com/oxygenxx77</a>，以 MIT 许可证开源。</p>
+  <div class="mini"><img src="assets/pet-jobhunter.png" alt=""><img src="assets/pet-kanban.png" alt=""></div>
 </footer>
 
 <div class="lightbox" id="lightbox"><img alt=""></div>
+
 <script>
   const box = document.getElementById('lightbox');
-  document.querySelectorAll('.shots img').forEach((img) => {
+  document.querySelectorAll('.photo img').forEach((img) => {
     img.addEventListener('click', () => {
       box.querySelector('img').src = img.src;
       box.querySelector('img').alt = img.alt;
@@ -376,6 +646,35 @@
   });
   box.addEventListener('click', () => box.classList.remove('show'));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') box.classList.remove('show'); });
+
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window);
+  const targets = document.querySelectorAll('.reveal, .hl, .draw');
+  document.querySelectorAll('.draw path').forEach((p) => {
+    const len = Math.ceil(p.getTotalLength());
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = still ? 0 : len;
+  });
+  const show = (el) => {
+    el.classList.add('in');
+    if (el.classList.contains('draw')) el.querySelectorAll('path').forEach((p) => (p.style.strokeDashoffset = 0));
+  };
+  if (still) {
+    targets.forEach(show);
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } });
+    }, { threshold: .15 });
+    targets.forEach((el) => io.observe(el));
+  }
+
+  const tabs = [...document.querySelectorAll('.tabs a')];
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      tabs.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main > section').forEach((s) => spy.observe(s));
 </script>
 </body>
 </html>

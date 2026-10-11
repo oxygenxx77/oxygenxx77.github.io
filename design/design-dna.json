@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "name": "秋招手帐 · Scrapbook",
+    "description": "把作品集做成一本真实在用的求职手帐：点阵纸页面、纸胶带贴住的截图、红笔批注、便利贴、打印小票和侧边索引标签。配色沿用工具本身（秋招看板的纸色与铁锈红、求职助手的蓝）。",
+    "source_references": [
+      "文字描述：手帐拼贴风（纸张、胶带、手写批注、贴纸）",
+      "assets/kanban-board.jpg —— 用 design-dna 的 measure-colors.mjs 测得纸色 #f5f0e8、铁锈红 #b44f30、灰青 #506261、土金 #be9847、墨色 #201d19",
+      "assets/jh-list.jpg —— 测得求职助手蓝 #4e86d8"
+    ],
+    "created_at": "2026-10-11"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "analogous warm neutrals with one cool counterpoint",
+      "primary": { "hex": "#b44f30", "role": "红笔：批注、手写强调、秋招看板相关的胶带和标签" },
+      "secondary": { "hex": "#4e86d8", "role": "蓝色圆珠笔与求职助手的胶带、标签" },
+      "accent": { "hex": "#f2d25c", "role": "荧光笔划线与便利贴，只用在需要被一眼看到的字上" },
+      "neutral": {
+        "scale": ["#fffdf7", "#f8f4ec", "#efe8db", "#e2d8c6", "#cfc4b2", "#9d958a", "#6b645b", "#26231f"],
+        "usage": "#fffdf7 便利贴、卡片纸；#f8f4ec 主页面纸；#efe8db 桌面底色；#e2d8c6 点阵与分隔线；#cfc4b2 纸张边缘；#9d958a 铅笔灰的次要信息；#6b645b 说明文字；#26231f 正文墨色"
+      },
+      "semantic": { "success": "#5f7f4f", "warning": "#be9847", "error": "#b44f30", "info": "#506261" },
+      "surface": { "background": "#efe8db", "card": "#fffdf7", "elevated": "#fffdf7" },
+      "contrast_strategy": "dark-on-light dominant：墨色正文压在浅纸色上（对比度 > 12:1），彩色只用于批注、胶带和标签，不用来承载大段文字"
+    },
+    "typography": {
+      "type_scale": {
+        "display": { "size": "clamp(40px, 6.4vw, 72px)", "weight": "500", "line_height": "1.18", "tracking": "0.02em" },
+        "heading_1": { "size": "clamp(30px, 4vw, 42px)", "weight": "500", "line_height": "1.3", "tracking": "0.02em" },
+        "heading_2": { "size": "28px", "weight": "500", "line_height": "1.35", "tracking": "0.02em" },
+        "heading_3": { "size": "21px", "weight": "500", "line_height": "1.4", "tracking": "0.01em" },
+        "body": { "size": "16px", "weight": "400", "line_height": "1.85", "tracking": "0.01em" },
+        "body_small": { "size": "14.5px", "weight": "400", "line_height": "1.75", "tracking": "0.01em" },
+        "caption": { "size": "12.5px", "weight": "400", "line_height": "1.6", "tracking": "0.04em" },
+        "overline": { "size": "22px", "weight": "400", "line_height": "1.2", "tracking": "0" }
+      },
+      "font_families": {
+        "heading": "\"LXGW WenKai\", \"Kaiti SC\", \"STKaiti\", \"KaiTi\", serif",
+        "body": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Noto Sans SC\", sans-serif",
+        "mono": "\"SF Mono\", Menlo, Consolas, \"Courier New\", monospace"
+      },
+      "font_style_notes": "标题用霞鹜文楷（楷书骨架、手写温度），正文用系统黑体保证可读；批注和「上标」用龙藏体手写字，不用全大写英文小标题。两种手写字体都裁成子集后本地托管。"
+    },
+    "spacing": {
+      "base_unit": "4px",
+      "scale": ["4px", "8px", "12px", "16px", "24px", "32px", "48px", "72px", "112px"],
+      "content_density": "comfortable",
+      "section_rhythm": "每一节是一张单独的纸：纸与纸之间露出 56px 桌面，纸内边距 72px，页内元素 24–48px，便利贴与截图之间故意留出不规则的空隙"
+    },
+    "layout": {
+      "grid_system": "12 列网格上的自由拼贴：截图和便利贴按列定位，但允许 ±2° 旋转和跨列重叠",
+      "max_content_width": "1080px",
+      "columns": "12（桌面） / 1（手机）",
+      "gutter": "32px",
+      "breakpoints": { "mobile": "≤ 720px", "tablet": "721–1024px", "desktop": "≥ 1025px" },
+      "alignment_tendency": "asymmetric"
+    },
+    "shape": {
+      "border_radius": { "small": "2px", "medium": "3px", "large": "6px", "pill": "999px（只用于贴纸和索引标签的圆角端）" },
+      "border_usage": "none —— 靠纸张阴影和胶带区分层次，不画 1px 卡片边框",
+      "divider_style": "手绘的波浪线或虚线撕边（SVG），不用直线 hr"
+    },
+    "elevation": {
+      "shadow_style": "layered",
+      "levels": {
+        "low": "0 1px 1px rgba(60, 40, 20, .10), 0 2px 6px -2px rgba(60, 40, 20, .12)",
+        "medium": "0 1px 2px rgba(60, 40, 20, .10), 0 14px 22px -12px rgba(60, 40, 20, .35)",
+        "high": "0 2px 4px rgba(60, 40, 20, .12), 0 30px 60px -20px rgba(40, 25, 10, .45)"
+      },
+      "depth_cues": "overlapping layers —— 胶带压在截图上，便利贴压住截图一角，纸张底部阴影更重（模拟翘起）"
+    },
+    "iconography": {
+      "style": "手绘线条（SVG 路径带轻微抖动），不用 emoji 当图标",
+      "stroke_weight": "2px，圆头圆角",
+      "size_scale": ["16px", "24px", "40px"],
+      "preferred_set": "自绘：箭头、圈注、下划线、对勾"
+    },
+    "motion": {
+      "easing": "cubic-bezier(.2, .8, .2, 1)",
+      "duration_scale": { "micro": "160ms", "normal": "360ms", "macro": "900ms" },
+      "entrance_pattern": "滚动到时，纸片从轻微偏移和 0° 落到最终的倾斜角（像被放下贴好），手绘线条描一遍",
+      "exit_pattern": "无退出动画",
+      "philosophy": "minimal functional —— 只在「贴上去」和「描线」两处动，其余保持安静"
+    },
+    "components": {
+      "button_style": "像贴在页面上的纸标签：纸色底、墨色字、底部阴影；悬停时轻微抬起并回正角度",
+      "input_style": "页面无输入框",
+      "card_style": "便利贴（#fffdf7 / 黄色）与索引卡（带横线），无边框，靠阴影与旋转区分",
+      "navigation_pattern": "页面右侧的竖排索引标签（writing-mode: vertical-rl），像手帐侧边贴的分隔标签；手机端改为页首目录",
+      "modal_style": "截图放大：深色桌面遮罩 + 原图，无边框",
+      "list_style": "手写序号（①②③）或手绘对勾，不用实心圆点",
+      "component_notes": "纸胶带用半透明色块 + 斜纹/波点图案，两端做锯齿撕边；技术栈写成一行等宽小字「用到：…」，不做胶囊标签；隐私检查的终端输出做成热敏打印小票（锯齿底边）"
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": ["亲手做的", "认真", "温暖", "有生活气"],
+      "visual_metaphor": "一本秋招期间真的在写的手帐：每个工具是一页，截图贴在上面，旁边是当时随手写下的批注",
+      "era_influence": "当代纸质手帐 / 子弹笔记，不带复古滤镜",
+      "genre": "indie creative · personal journal",
+      "personality_traits": ["务实", "细心", "有点幽默", "愿意把过程摊开给人看"],
+      "adjectives": ["纸感", "手写", "拼贴", "安静", "可信"]
+    },
+    "visual_language": {
+      "complexity": "rich",
+      "ornamentation": "decorative —— 但每个装饰都有「功能」：胶带固定截图、批注解释截图、标签做导航",
+      "whitespace_usage": "页面留白像纸张留白，大块留给截图和正文，装饰挤在边角",
+      "visual_weight_distribution": "截图最重，手写标题其次，批注和胶带是点缀",
+      "focal_strategy": "progressive reveal —— 每页一个主角（截图或标题），批注引导视线到细节",
+      "contrast_level": "medium",
+      "texture_usage": "点阵纸纹理 + 极淡的纸张噪点；胶带有斜纹和波点"
+    },
+    "composition": {
+      "hierarchy_method": "typographic hierarchy + spatial isolation",
+      "balance_type": "asymmetric",
+      "flow_direction": "Z 字形：截图左右交替，批注从截图边缘伸向正文",
+      "grouping_strategy": "同一工具的截图、烦恼便利贴和要点贴在同一「页」，用同色胶带归组",
+      "negative_space_role": "像纸上没写字的地方，让拼贴不至于拥挤"
+    },
+    "imagery": {
+      "photo_treatment": "截图原样展示，加一圈 6px 白边像打印照片，轻微旋转",
+      "illustration_style": "两只桌宠做成带白色描边的模切贴纸",
+      "graphic_elements": "纸胶带、红笔圈注和箭头、荧光笔划线、便利贴、打印小票、索引标签",
+      "pattern_usage": "点阵纸（24px 间距）作为页面底纹；胶带上的斜纹与波点",
+      "image_shape": "矩形照片 + 模切贴纸"
+    },
+    "interaction_feel": {
+      "feedback_style": "物理感：悬停时纸片抬起、回正角度",
+      "hover_behavior": "截图回正到 0° 并加深阴影；贴纸轻轻晃一下；链接下出现手绘下划线",
+      "transition_personality": "smooth glide",
+      "loading_style": "无加载态（静态页面）",
+      "microinteraction_density": "low"
+    },
+    "brand_voice_in_ui": {
+      "tone": "第一人称、像在跟同学讲自己的手帐；说具体的事，不喊口号",
+      "formality": "半正式：书面中文，偶尔口语",
+      "cta_style": "subtle suggestion —— 「去 GitHub 看代码」",
+      "empty_state_approach": "无空状态",
+      "error_tone": "无错误态"
+    }
+  },
+  "visual_effects": {
+    "overview": {
+      "effect_intensity": "subtle-accent",
+      "performance_tier": "lightweight",
+      "fallback_strategy": "prefers-reduced-motion 时去掉所有入场和描线动画，直接显示最终状态",
+      "primary_technology": "CSS only + 少量原生 JS（IntersectionObserver）"
+    },
+    "background_effects": {
+      "type": "noise-field",
+      "description": "静态点阵纸 + SVG feTurbulence 生成的极淡纸张颗粒，不动",
+      "technology": "CSS radial-gradient + 内联 SVG 数据 URI",
+      "params": { "color_palette": ["#e2d8c6", "#efe8db"], "speed": "0（静态）", "density": "24px 点距", "opacity": "0.5", "blend_mode": "multiply" }
+    },
+    "particle_systems": {
+      "enabled": false, "type": "none", "description": "不使用", "technology": "none",
+      "params": { "count": "0", "shape": "none", "size_range": "none", "movement_pattern": "none", "color_behavior": "none", "interaction": "none", "spawn_area": "none" }
+    },
+    "3d_elements": {
+      "enabled": false, "type": "none", "description": "不使用", "technology": "none",
+      "params": { "renderer": "none", "lighting": "none", "camera": "none", "materials": "none", "geometry": "none", "post_processing": [], "interaction_model": "none" }
+    },
+    "shader_effects": {
+      "enabled": false, "type": "none", "description": "不使用", "technology": "none",
+      "params": { "uniforms": "none", "vertex_manipulation": "none", "fragment_output": "none", "noise_type": "none", "distortion": "none" }
+    },
+    "scroll_effects": {
+      "parallax": { "enabled": false, "layers": "0", "depth_range": "none", "speed_curve": "none" },
+      "scroll_triggered_animations": {
+        "enabled": true,
+        "trigger_points": "元素进入视口 15%",
+        "animation_type": "fade-up + rotate-settle（从 0° 落到各自的倾斜角）",
+        "scrub_behavior": "triggered（只播放一次）"
+      },
+      "scroll_morphing": { "enabled": false, "description": "不使用" }
+    },
+    "text_effects": {
+      "type": "none",
+      "description": "文字不做动画；荧光笔划线用 background 渐变在进入视口时从左向右刷出",
+      "technology": "CSS background-size 过渡",
+      "params": { "split_strategy": "none", "animation_per_unit": "none", "stagger": "0", "effect_style": "highlighter-sweep" }
+    },
+    "cursor_effects": {
+      "enabled": false, "type": "none", "description": "保留系统光标",
+      "params": { "shape": "default", "size": "default", "blend_mode": "normal", "trail": "none", "interaction_zone": "none" }
+    },
+    "image_effects": {
+      "type": "parallax-tilt",
+      "description": "截图带白边和倾斜，悬停时回正、抬起；点击放大",
+      "technology": "CSS transform + box-shadow 过渡",
+      "params": { "filter_pipeline": "none", "hover_transform": "rotate(0) translateY(-3px)", "reveal_animation": "rotate-settle", "distortion_type": "none" }
+    },
+    "glassmorphism_neumorphism": {
+      "enabled": false, "style": "none",
+      "params": { "blur_radius": "0", "transparency": "1", "border_treatment": "none", "shadow_type": "none", "light_source_angle": "none" }
+    },
+    "canvas_drawings": {
+      "enabled": false, "type": "none", "description": "不使用", "technology": "none",
+      "params": { "draw_method": "none", "animation_loop": "none", "color_scheme": "none", "responsiveness": "none", "interaction": "none" }
+    },
+    "svg_animations": {
+      "enabled": true,
+      "type": "path-draw",
+      "description": "红笔箭头、圈注和波浪下划线在进入视口时描一遍",
+      "params": { "animation_method": "stroke-dashoffset 过渡", "path_morphing": "none", "stroke_animation": "从路径长度到 0，900ms", "filter_effects": "none" }
+    },
+    "composite_notes": "层次从下到上：桌面底色 → 点阵纸页面 → 截图（白边照片）→ 纸胶带 → 便利贴 → 红笔批注。所有效果都是 CSS 与少量 JS，没有外部库。"
+  }
+}
